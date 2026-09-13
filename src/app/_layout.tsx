@@ -15,8 +15,8 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
   // personal font Opensans
   const [loaded, error] = useFonts({
-    "open-sans": require("../assets/fonts/OpenSans_Condensed-Regular.ttf"),
-    "open-sans-bold": require("../assets/fonts/OpenSans_Condensed-Bold.ttf"),
+    "open-sans": require("../../assets/fonts/OpenSans_Condensed-Regular.ttf"),
+    "open-sans-bold": require("../../assets/fonts/OpenSans_Condensed-Bold.ttf"),
   });
   useEffect(() => {
     if (loaded || error) {
