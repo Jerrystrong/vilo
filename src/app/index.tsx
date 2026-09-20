@@ -8,7 +8,7 @@ export default function HomeScreen() {
   return (
     <ThemedView className="bg-whiteBg dark:bg-blackBg" style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <View className="w-full h-[200px] bg-primary_color rounded-xl">
+        <View className="w-full h-[200px] bg-primary_color rounded-xl flex items-center justify-center">
           <Text className="text-lg text-white dark:text-black font-bold">
             Hello there
           </Text>
