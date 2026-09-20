@@ -31,12 +31,12 @@ export default function LocationAnimation() {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
 
       // Son du beep de notification iPhone
-      // try {
-      //   player.seekTo(0);
-      //   player.play();
-      // } catch (e) {
-      //   console.log("Audio play error:", e);
-      // }
+      try {
+        player.seekTo(0);
+        player.play();
+      } catch (e) {
+        console.log("Audio play error:", e);
+      }
       // Animation 2 : grow de l'icône location
       Animated.parallel([
         Animated.spring(locationScale, {
