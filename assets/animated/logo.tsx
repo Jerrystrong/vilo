@@ -1,9 +1,16 @@
+import React, { useEffect, useRef } from "react";
 import * as Haptics from "expo-haptics";
-import { useEffect, useRef } from "react";
 import { Animated, Easing, View } from "react-native";
 import Svg, { ClipPath, Defs, Path } from "react-native-svg";
 
-const AnimatedPath = Animated.createAnimatedComponent(Path);
+// Filtre la prop `collapsable` (React Native only) pour éviter
+// le warning DOM sur web quand Animated l'injecte dans un SVG Path.
+const WebSafePath = React.forwardRef<any, any>(
+  ({ collapsable: _c, ...props }, ref) => <Path {...props} ref={ref} />
+);
+WebSafePath.displayName = "WebSafePath";
+
+const AnimatedPath = Animated.createAnimatedComponent(WebSafePath as any);
 const AnimatedView = Animated.createAnimatedComponent(View);
 
 type LocationAnimationProps = {
@@ -93,8 +100,8 @@ export default function LocationAnimation({ onFinish }: LocationAnimationProps =
   return (
     <View
       style={{
-        width: 255,
-        height: 212,
+        width: 191,
+        height: 159,
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "transparent",
@@ -105,8 +112,8 @@ export default function LocationAnimation({ onFinish }: LocationAnimationProps =
           ===================================================== */}
 
       <Svg
-        width={255}
-        height={212}
+        width={191}
+        height={159}
         viewBox="0 0 255 212"
         fill="none"
       >
@@ -181,8 +188,8 @@ export default function LocationAnimation({ onFinish }: LocationAnimationProps =
            * Position exacte du pin
            * centré au-dessus de l'extrémité creusée.
            */
-          left: 164,
-          top: 62,
+          left: 123,
+          top: 47,
 
           width: 24,
           height: 32,
