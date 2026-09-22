@@ -1,43 +1,64 @@
-import { useAudioPlayer } from "expo-audio";
 import * as Haptics from "expo-haptics";
 import { useEffect, useRef } from "react";
 import { Animated, Easing, View } from "react-native";
-import Svg, { Path, Rect } from "react-native-svg";
+import Svg, { ClipPath, Defs, Path } from "react-native-svg";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 const AnimatedView = Animated.createAnimatedComponent(View);
 
-export default function LocationAnimation() {
+type LocationAnimationProps = {
+  onFinish?: () => void;
+};
+
+export default function LocationAnimation({ onFinish }: LocationAnimationProps = {}) {
   const pathProgress = useRef(new Animated.Value(0)).current;
   const locationScale = useRef(new Animated.Value(0)).current;
   const locationOpacity = useRef(new Animated.Value(0)).current;
 
-  const player = useAudioPlayer(require("../sounds/notification.wav"));
-
-  // Longueur du path récupérée depuis ton SVG
-  const PATH_LENGTH = 499.412;
+  /*
+   * Longueur du nouveau tracé SVG.
+   * Utilisée pour l'animation strokeDashoffset.
+   */
+  const PATH_LENGTH = 390;
 
   useEffect(() => {
-    // Animation 1 : dessin du V
+    /*
+     * Animation 1 :
+     * dessin progressif du tracé turquoise
+     */
     Animated.timing(pathProgress, {
       toValue: 1,
-      duration: 500,
-      easing: Easing.bezier(0.17, 0.67, 0.83, 0.67),
+      duration: 1200,
+      easing: Easing.bezier(0.27, 0.17, 0.83, 0.67),
       useNativeDriver: false,
     }).start(({ finished }) => {
       if (!finished) return;
 
-      // Sensor / Retour haptique doux
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+      /*70
+       * Retour haptique une fois
+       * que le tracé est terminé.
+       */
+      Haptics.impactAsync(
+        Haptics.ImpactFeedbackStyle.Light
+      ).catch(() => {});
 
-      // Son du beep de notification iPhone
-      // try {
-      //   player.seekTo(0);
-      //   player.play();
-      // } catch (e) {
-      //   console.log("Audio play error:", e);
-      // }
-      // Animation 2 : grow de l'icône location
+      /*
+       * Son de notification
+       *
+       * Décommente si nécessaire :
+       *
+       * try {
+       *   player.seekTo(0);
+       *   player.play();
+       * } catch (e) {
+       *   console.log("Audio play error:", e);
+       * }
+       */
+
+      /*
+       * Animation 2 :
+       * apparition du pin de localisation.
+       */
       Animated.parallel([
         Animated.spring(locationScale, {
           toValue: 1,
@@ -45,20 +66,25 @@ export default function LocationAnimation() {
           tension: 100,
           useNativeDriver: true,
         }),
+
         Animated.timing(locationOpacity, {
           toValue: 1,
           duration: 180,
           easing: Easing.out(Easing.ease),
           useNativeDriver: true,
         }),
-      ]).start(({ finished }) => {
-        if (!finished) return;
+      ]).start(() => {
+        setTimeout(() => {
+          onFinish?.();
+        }, 400);
       });
     });
+  }, [onFinish]);
 
-    // Pas de loop ici
-  }, []);
-
+  /*
+   * Animation du tracé :
+   * de complètement caché → complètement visible.
+   */
   const strokeDashoffset = pathProgress.interpolate({
     inputRange: [0, 1],
     outputRange: [PATH_LENGTH, 0],
@@ -67,18 +93,74 @@ export default function LocationAnimation() {
   return (
     <View
       style={{
-        width: 500,
-        height: 500,
+        width: 255,
+        height: 212,
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor: "transparent",
       }}
     >
-      {/* Animation du tracé */}
-      <Svg width={500} height={500} viewBox="0 0 500 500" fill="none">
+      {/* =====================================================
+          TRACÉ TURQUOISE
+          ===================================================== */}
+
+      <Svg
+        width={255}
+        height={212}
+        viewBox="0 0 255 212"
+        fill="none"
+      >
+        <Defs>
+          <ClipPath id="notchCutout">
+            <Path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="
+                M -50 -50 H 300 V 300 H -50 Z
+                M 176 79
+                A 15 15 0 0 0 176 109
+                A 15 15 0 0 0 176 79
+                Z
+              "
+            />
+          </ClipPath>
+        </Defs>
+
         <AnimatedPath
-          d="M195 295C135 255 125 185 180 185C230 185 215 335 262 335C298 335 320 235 298 188"
+          clipPath="url(#notchCutout)"
+          d="
+            M 86 112
+
+            C 74 109
+              63 99
+              62 86
+
+            C 60 72
+              66 61
+              77 56
+
+            C 89 50
+              101 57
+              106 70
+
+            C 112 86
+              112 107
+              119 128
+
+            C 125 148
+              132 163
+              143 164
+
+            C 157 165
+              166 147
+              171 128
+
+            C 173 121
+              175 114
+              176 108
+          "
           stroke="#F4F7F6"
-          strokeWidth={32}
+          strokeWidth={21}
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeDasharray={`${PATH_LENGTH} ${PATH_LENGTH}`}
@@ -86,14 +168,24 @@ export default function LocationAnimation() {
         />
       </Svg>
 
-      {/* Location icon : grow après le tracé */}
+      {/* =====================================================
+          PIN DE LOCALISATION
+          Apparaît après le tracé
+          ===================================================== */}
+
       <AnimatedView
         style={{
           position: "absolute",
-          left: 259,
-          top: 168,
-          width: 93,
-          height: 92,
+
+          /*
+           * Position exacte du pin
+           * centré au-dessus de l'extrémité creusée.
+           */
+          left: 164,
+          top: 62,
+
+          width: 24,
+          height: 32,
 
           opacity: locationOpacity,
 
@@ -104,32 +196,66 @@ export default function LocationAnimation() {
           ],
         }}
       >
-        <Svg width={93} height={92} viewBox="0 0 93 92" fill="none">
-          {/* Cercle turquoise */}
-          <Rect x={0} y={0} width={93} height={92} rx={46} fill="#007B7B" />
-
-          {/* Icône location */}
+        <Svg
+          width={24}
+          height={32}
+          viewBox="0 0 24 32"
+          fill="none"
+        >
+          {/*
+           * Pin orange.
+           *
+           * fillRule="evenodd" permet de créer
+           * directement le trou central sans
+           * ajouter de cercle blanc.
+           *
+           * Le trou est donc réellement transparent.
+           */}
           <Path
+            fill="#CC4200"
             fillRule="evenodd"
             clipRule="evenodd"
             d="
-              M32.559 52.949
-              L47 71
-              L61.441 52.949
-              C64.23 49.462 65.75 45.13 65.75 40.665
-              V39.75
-              C65.75 29.395 57.355 21 47 21
-              C36.645 21 28.25 29.395 28.25 39.75
-              V40.665
-              C28.25 45.13 29.77 49.462 32.559 52.949Z
+              M 12 0.5
 
-              M47 46
-              C50.452 46 53.25 43.202 53.25 39.75
-              C53.25 36.298 50.452 33.5 47 33.5
-              C43.548 33.5 40.75 36.298 40.75 39.75
-              C40.75 43.202 43.548 46 47 46Z
+              C 5.65 0.5
+                0.5 5.65
+                0.5 12
+
+              C 0.5 20.1
+                12 31.5
+                12 31.5
+
+              C 12 31.5
+                23.5 20.1
+                23.5 12
+
+              C 23.5 5.65
+                18.35 0.5
+                12 0.5
+
+              Z
+
+              M 12 8.1
+
+              C 9.85 8.1
+                8.1 9.85
+                8.1 12
+
+              C 8.1 14.15
+                9.85 15.9
+                12 15.9
+
+              C 14.15 15.9
+                15.9 14.15
+                15.9 12
+
+              C 15.9 9.85
+                14.15 8.1
+                12 8.1
+
+              Z
             "
-            fill="#CC4200"
           />
         </Svg>
       </AnimatedView>

@@ -29,17 +29,17 @@ export default function TabLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      {showAnimatedSplash && (
-        <AnimatedSplashOverlay
-          onFinish={() => setShowAnimatedSplash(false)}
-        />
-      )}
-
       <Stack
         screenOptions={{
           headerShown: false,
         }}
       />
+
+      {showAnimatedSplash && (
+        <AnimatedSplashOverlay
+          onFinish={() => setShowAnimatedSplash(false)}
+        />
+      )}
     </ThemeProvider>
   );
 }

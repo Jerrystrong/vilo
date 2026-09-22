@@ -1,12 +1,41 @@
+import LocationAnimation from "@/assets/animated/logo";
 import { Image } from 'expo-image';
-import { StyleSheet, View } from 'react-native';
+import { useRef } from "react";
+import { Animated as RNAnimated, StyleSheet, View } from 'react-native';
 import Animated, { Keyframe, Easing } from 'react-native-reanimated';
 
 import classes from './animated-icon.module.css';
 const DURATION = 300;
 
-export function AnimatedSplashOverlay() {
-  return null;
+type AnimatedSplashOverlayProps = {
+  onFinish?: () => void;
+};
+
+export function AnimatedSplashOverlay({
+  onFinish,
+}: AnimatedSplashOverlayProps) {
+  const fadeAnim = useRef(new RNAnimated.Value(1)).current;
+
+  const handleAnimationFinish = () => {
+    RNAnimated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 350,
+      useNativeDriver: false,
+    }).start(() => {
+      onFinish?.();
+    });
+  };
+
+  return (
+    <RNAnimated.View
+      style={[
+        styles.splashOverlay,
+        { opacity: fadeAnim },
+      ]}
+    >
+      <LocationAnimation onFinish={handleAnimationFinish} />
+    </RNAnimated.View>
+  );
 }
 
 const keyframe = new Keyframe({
@@ -104,5 +133,13 @@ const styles = StyleSheet.create({
     width: 128,
     height: 128,
     position: 'absolute',
+  },
+  splashOverlay: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: '#007B7B',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 99999,
+    padding: 32,
   },
 });

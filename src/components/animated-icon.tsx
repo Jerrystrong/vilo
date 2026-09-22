@@ -1,10 +1,9 @@
 import LocationAnimation from "@/assets/animated/logo";
 import { Image } from "expo-image";
 import * as SplashScreen from "expo-splash-screen";
-import { useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { useRef } from "react";
+import { Animated as RNAnimated, Dimensions, StyleSheet, View } from "react-native";
 import Animated, { Easing, Keyframe } from "react-native-reanimated";
-import { scheduleOnRN } from "react-native-worklets";
 
 const INITIAL_SCALE_FACTOR = Dimensions.get("screen").height / 90;
 const DURATION = 1500;
@@ -16,64 +15,27 @@ type AnimatedSplashOverlayProps = {
 export function AnimatedSplashOverlay({
   onFinish,
 }: AnimatedSplashOverlayProps) {
-  const [animate, setAnimate] = useState(false);
-  const [visible, setVisible] = useState(true);
+  const fadeAnim = useRef(new RNAnimated.Value(1)).current;
 
-  if (!visible) return null;
+  const handleAnimationFinish = () => {
+    RNAnimated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 350,
+      useNativeDriver: true,
+    }).start(() => {
+      onFinish?.();
+    });
+  };
 
-  const splashKeyframe = new Keyframe({
-    0: {
-      transform: [{ scale: 1 }],
-      opacity: 1,
-    },
-    20: {
-      opacity: 1,
-    },
-    80: {
-      opacity: 1,
-      transform: [{ scale: 1 }],
-      easing: Easing.elastic(0.7),
-    },
-    100: {
-      opacity: 0,
-      transform: [{ scale: 1.1 }],
-      easing: Easing.elastic(0.7),
-    },
-  });
-
-  const image = (
-    <Image
-      style={styles.image}
-      source={require("@/assets/images/splash-icon.png")}
-    />
-  );
-
-  return animate ? (
-    <Animated.View
-      entering={splashKeyframe.duration(DURATION).withCallback((finished) => {
-        "worklet";
-        if (finished) {
-          scheduleOnRN(setVisible, false);
-        }
-        if (onFinish) {
-          scheduleOnRN(onFinish);
-        }
-      })}
-      style={styles.splashOverlay}
+  return (
+    <RNAnimated.View
+      style={[
+        styles.splashOverlay,
+        { opacity: fadeAnim },
+      ]}
     >
-      <LocationAnimation />
-    </Animated.View>
-  ) : (
-    <View
-      onLayout={() => {
-        SplashScreen.hideAsync().finally(() => {
-          setAnimate(true);
-        });
-      }}
-      style={styles.splashOverlay}
-    >
-      <LocationAnimation />
-    </View>
+      <LocationAnimation onFinish={handleAnimationFinish} />
+    </RNAnimated.View>
   );
 }
 
@@ -176,7 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#007B7B",
     alignItems: "center",
     justifyContent: "center",
-    zIndex: 1000,
+    zIndex: 99999,
     padding: 32,
   },
 });
