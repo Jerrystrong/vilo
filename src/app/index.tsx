@@ -1,35 +1,79 @@
 import DarkHotBg from "@/assets/svg/darkHotBg";
 import LightHotFont from "@/assets/svg/lightHotFont";
+import EstablishmentRadar from "@/components/radar/EstablishmentRadar";
+import { RadarEstablishment } from "@/components/radar/radar.types";
 import { ThemedView } from "@/components/themed-view";
-import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
 import { LinearGradient } from "expo-linear-gradient";
 import { cssInterop } from "nativewind";
-import { StyleSheet, useColorScheme } from "react-native";
+import { StyleSheet, useColorScheme, View } from "react-native";
 
 cssInterop(LinearGradient, { className: "style" });
+const establishments: RadarEstablishment[] = [
+  {
+    id: "1",
+    type: "restaurant",
+    orbit: 1,
+    angle: 320,
+    size: 34,
+  },
+
+  {
+    id: "2",
+    type: "restaurant",
+    orbit: 2,
+    angle: 40,
+    size: 34,
+  },
+
+  {
+    id: "3",
+    type: "bar",
+    orbit: 1,
+    angle: 145,
+    size: 34,
+  },
+
+  {
+    id: "4",
+    type: "tourist",
+    orbit: 1,
+    angle: 220,
+    size: 34,
+  },
+  {
+    id: "5",
+    type: "bar",
+    orbit: 3,
+    angle: 205,
+    size: 34,
+  },
+  {
+    id: "6",
+    type: "bar",
+    orbit: 3,
+    angle: 15,
+    size: 34,
+  },
+];
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
   return (
-    <ThemedView className="bg-whiteBg dark:bg-blackBg" style={styles.container}>
-      {/* <WhiteHotFont style={StyleSheet.absoluteFill} />
-      <LinearGradient
-        colors={[
-          "rgba(251, 244, 214, 0)",
-          "rgba(251, 244, 214, 0.35)",
-          "rgba(251, 244, 214, 0.89)",
-          "#F4F7F6",
-        ]}
-        locations={[0, 0.1, 0.25, 0.4]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={styles.bottomGradient}
-      /> */}
+    <ThemedView
+      className="flex-1 bg-whiteBg dark:bg-blackBg"
+      style={styles.container}
+    >
       {colorScheme === "dark" ? <DarkHotBg /> : <LightHotFont />}
 
-      {/* <SafeAreaView style={styles.safeArea}>
-        
-      </SafeAreaView> */}
+      <View style={styles.radarContainer}>
+        <EstablishmentRadar
+          establishments={establishments}
+          width={340}
+          enableTilt
+        />
+      </View>
+
+      {/* tes autres composants */}
     </ThemedView>
   );
 }
@@ -37,42 +81,22 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    flexDirection: "row",
+    overflow: "visible",
   },
-  bottomGradient: {
+
+  radarContainer: {
     position: "absolute",
-    bottom: 0,
+    top: 50,
     left: 0,
     right: 0,
-    height: 190,
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: "center",
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
+
+    height: 700,
+
     alignItems: "center",
     justifyContent: "center",
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: "center",
-  },
-  code: {
-    textTransform: "uppercase",
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: "stretch",
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+
+    overflow: "visible",
+
+    zIndex: 20,
   },
 });

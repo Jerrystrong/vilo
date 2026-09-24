@@ -1,13 +1,15 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
   Pressable,
   StyleSheet,
   Platform,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import * as Haptics from 'expo-haptics';
+  Animated,
+  Easing,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as Haptics from "expo-haptics";
 
 import {
   FireIcon,
@@ -18,32 +20,41 @@ import {
   StatsIcon,
   CalendarCheckIcon,
   PlusCenterIcon,
-} from './tab-icons';
-import { UserRole, useUserRole } from '@/context/role-context';
+} from "./tab-icons";
+import { UserRole, useUserRole } from "@/context/role-context";
 
-export type UserTabKey = 'flame' | 'search' | 'map' | 'favorites' | 'profile';
-export type EtabTabKey = 'stats' | 'calendar' | 'create' | 'favorites' | 'profile';
+export type UserTabKey =
+  | "flame"
+  | "search"
+  | "map"
+  | "favorites"
+  | "profile";
+
+export type EtabTabKey =
+  | "stats"
+  | "calendar"
+  | "create"
+  | "favorites"
+  | "profile";
+
 export type TabKey = UserTabKey | EtabTabKey;
 
 export interface AppTabsProps {
-  /**
-   * User role: 'user' for client/normal user, 'etab' for establishment
-   * If not provided, will read from RoleContext
-   */
   role?: UserRole;
-  /**
-   * Currently active tab key
-   */
   activeTab?: string;
-  /**
-   * Callback fired when a tab is pressed
-   */
   onTabChange?: (tabKey: string) => void;
-  /**
-   * Unread notification count for the heart badge (defaults to 8 for user role)
-   */
   favoritesBadgeCount?: number;
 }
+
+interface IndicatorMetrics {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+const SLIDE_DURATION = 260;
+const SLIDE_EASING = Easing.out(Easing.cubic);
 
 export default function AppTabs({
   role: propRole,
@@ -52,38 +63,289 @@ export default function AppTabs({
   favoritesBadgeCount = 8,
 }: AppTabsProps) {
   const context = useUserRole();
-  const currentRole: UserRole = propRole ?? context.role ?? 'user';
+  const currentRole: UserRole = propRole ?? context.role ?? "user";
   const insets = useSafeAreaInsets();
 
-  // Default active tabs matching the user's screenshots:
-  // User normal: 'map' (center icon active)
-  // Etab: 'stats' (first icon active)
-  const defaultTab = currentRole === 'user' ? 'map' : 'stats';
-  const [internalActiveTab, setInternalActiveTab] = React.useState<string>(defaultTab);
+  // ------------------------------------------------------------
+  // ACTIVE TAB
+  // ------------------------------------------------------------
 
-  const activeTab = controlledActiveTab !== undefined ? controlledActiveTab : internalActiveTab;
+  const defaultTab = currentRole === "user" ? "map" : "stats";
 
-  // Sync default if role switches and controlled prop is not used
+  const [internalActiveTab, setInternalActiveTab] =
+    React.useState<string>(defaultTab);
+
+  const activeTab =
+    controlledActiveTab !== undefined
+      ? controlledActiveTab
+      : internalActiveTab;
+
+  // ------------------------------------------------------------
+  // SYNC ROLE
+  // ------------------------------------------------------------
+
   React.useEffect(() => {
     if (controlledActiveTab === undefined) {
-      setInternalActiveTab(currentRole === 'user' ? 'map' : 'stats');
+      const nextTab = currentRole === "user" ? "map" : "stats";
+
+      setInternalActiveTab(nextTab);
+      activeTabRef.current = nextTab;
     }
   }, [currentRole, controlledActiveTab]);
 
+  // ------------------------------------------------------------
+  // INDICATOR REFS
+  // ------------------------------------------------------------
+
+  const pillRef = React.useRef<View>(null);
+
+  const indicatorNodes = React.useRef<
+    Partial<Record<TabKey, View | null>>
+  >({});
+
+  const indicatorMetrics = React.useRef<
+    Partial<Record<TabKey, IndicatorMetrics>>
+  >({});
+
+  const activeTabRef = React.useRef(activeTab);
+
+  const [isIndicatorReady, setIndicatorReady] = React.useState(false);
+
+  // ------------------------------------------------------------
+  // ANIMATED VALUES
+  // ------------------------------------------------------------
+
+  const translateX = React.useRef(new Animated.Value(0)).current;
+  const translateY = React.useRef(new Animated.Value(0)).current;
+
+  const indicatorWidth = React.useRef(new Animated.Value(0)).current;
+  const indicatorHeight = React.useRef(new Animated.Value(0)).current;
+
+  // ------------------------------------------------------------
+  // KEEP ACTIVE TAB REF IN SYNC
+  // ------------------------------------------------------------
+
+  React.useEffect(() => {
+    activeTabRef.current = activeTab;
+  }, [activeTab]);
+
+  // ------------------------------------------------------------
+  // RESET INDICATOR WHEN ROLE CHANGES
+  // ------------------------------------------------------------
+
+  React.useEffect(() => {
+    indicatorMetrics.current = {};
+
+    setIndicatorReady(false);
+
+    // Reset animated values so we never display
+    // an old indicator position while changing role.
+    translateX.setValue(0);
+    translateY.setValue(0);
+    indicatorWidth.setValue(0);
+    indicatorHeight.setValue(0);
+  }, [
+    currentRole,
+    translateX,
+    translateY,
+    indicatorWidth,
+    indicatorHeight,
+  ]);
+
+  // ------------------------------------------------------------
+  // REGISTER TAB ANCHOR
+  // ------------------------------------------------------------
+
+  const registerIndicatorRef = React.useCallback(
+    (key: TabKey, node: View | null) => {
+      indicatorNodes.current[key] = node;
+    },
+    []
+  );
+
+  // ------------------------------------------------------------
+  // ANIMATE INDICATOR
+  // ------------------------------------------------------------
+
+  const animateIndicator = React.useCallback(
+    (metrics: IndicatorMetrics, immediate = false) => {
+      if (immediate) {
+        translateX.setValue(metrics.x);
+        translateY.setValue(metrics.y);
+        indicatorWidth.setValue(metrics.width);
+        indicatorHeight.setValue(metrics.height);
+        return;
+      }
+
+      // Stop previous animation before starting another one.
+      translateX.stopAnimation();
+      translateY.stopAnimation();
+      indicatorWidth.stopAnimation();
+      indicatorHeight.stopAnimation();
+
+      Animated.parallel([
+        Animated.timing(translateX, {
+          toValue: metrics.x,
+          duration: SLIDE_DURATION,
+          easing: SLIDE_EASING,
+          useNativeDriver: true,
+        }),
+
+        Animated.timing(translateY, {
+          toValue: metrics.y,
+          duration: SLIDE_DURATION,
+          easing: SLIDE_EASING,
+          useNativeDriver: true,
+        }),
+
+        Animated.timing(indicatorWidth, {
+          toValue: metrics.width,
+          duration: SLIDE_DURATION,
+          easing: SLIDE_EASING,
+          useNativeDriver: false,
+        }),
+
+        Animated.timing(indicatorHeight, {
+          toValue: metrics.height,
+          duration: SLIDE_DURATION,
+          easing: SLIDE_EASING,
+          useNativeDriver: false,
+        }),
+      ]).start();
+    },
+    [
+      translateX,
+      translateY,
+      indicatorWidth,
+      indicatorHeight,
+    ]
+  );
+
+  // ------------------------------------------------------------
+  // MEASURE TAB
+  // ------------------------------------------------------------
+
+  const measureIndicator = React.useCallback(
+    (key: TabKey) => {
+      const node = indicatorNodes.current[key];
+      const container = pillRef.current;
+
+      if (!node || !container) {
+        return;
+      }
+
+      requestAnimationFrame(() => {
+        node.measureLayout(
+          container,
+
+          (x, y, width, height) => {
+            const metrics: IndicatorMetrics = {
+              x,
+              y,
+              width,
+              height,
+            };
+
+            // Always keep latest measurements.
+            indicatorMetrics.current[key] = metrics;
+
+            // Only the active tab controls the visible indicator.
+            if (key !== activeTabRef.current) {
+              return;
+            }
+
+            // First measurement:
+            // place indicator immediately without animation.
+            if (!isIndicatorReady) {
+              animateIndicator(metrics, true);
+
+              setIndicatorReady(true);
+
+              return;
+            }
+
+            // Subsequent measurements:
+            // animate normally.
+            animateIndicator(metrics);
+          },
+
+          () => {
+            // Layout not ready yet.
+            // onLayout will trigger another measurement.
+          }
+        );
+      });
+    },
+    [animateIndicator, isIndicatorReady]
+  );
+
+  // ------------------------------------------------------------
+  // PILL LAYOUT
+  // ------------------------------------------------------------
+
+  const handlePillLayout = React.useCallback(() => {
+    requestAnimationFrame(() => {
+      const keys = Object.keys(
+        indicatorNodes.current
+      ) as TabKey[];
+
+      keys.forEach((key) => {
+        measureIndicator(key);
+      });
+    });
+  }, [measureIndicator]);
+
+  // ------------------------------------------------------------
+  // ACTIVE TAB CHANGE
+  // ------------------------------------------------------------
+
+  React.useEffect(() => {
+    activeTabRef.current = activeTab;
+
+    const metrics =
+      indicatorMetrics.current[activeTab as TabKey];
+
+    // If the tab was already measured,
+    // move indicator immediately through animation.
+    if (metrics && isIndicatorReady) {
+      animateIndicator(metrics);
+    }
+  }, [
+    activeTab,
+    isIndicatorReady,
+    animateIndicator,
+  ]);
+
+  // ------------------------------------------------------------
+  // TAB PRESS
+  // ------------------------------------------------------------
+
   const handleTabPress = (tabKey: string) => {
-    if (Platform.OS !== 'web') {
+    if (Platform.OS !== "web") {
       try {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        Haptics.impactAsync(
+          Haptics.ImpactFeedbackStyle.Light
+        );
       } catch {
         // Safe fallback
       }
     }
+
+    // IMPORTANT:
+    // Update immediately so measureIndicator()
+    // always knows which tab is active.
+    activeTabRef.current = tabKey;
+
     if (onTabChange) {
       onTabChange(tabKey);
     } else {
       setInternalActiveTab(tabKey);
     }
   };
+
+  // ------------------------------------------------------------
+  // BOTTOM OFFSET
+  // ------------------------------------------------------------
 
   const bottomOffset = Platform.select({
     web: 24,
@@ -92,64 +354,104 @@ export default function AppTabs({
     default: 20,
   });
 
+  // ------------------------------------------------------------
+  // RENDER
+  // ------------------------------------------------------------
+
   return (
     <View
       pointerEvents="box-none"
-      style={[styles.wrapper, { bottom: bottomOffset }]}
+      style={[
+        styles.wrapper,
+        {
+          bottom: bottomOffset,
+        },
+      ]}
     >
-      <View style={styles.pillContainer}>
-        {currentRole === 'user' ? (
-          /* ==================================================== */
-          /* MENU 1 : USER NORMAL                                  */
-          /* ==================================================== */
+      <View
+        ref={pillRef}
+        onLayout={handlePillLayout}
+        style={styles.pillContainer}
+      >
+        {currentRole === "user" ? (
           <>
             {/* 1. Flame */}
             <TabItem
-              isActive={activeTab === 'flame'}
-              onPress={() => handleTabPress('flame')}
+              tabKey="flame"
+              isActive={activeTab === "flame"}
+              onPress={() => handleTabPress("flame")}
+              registerIndicatorRef={registerIndicatorRef}
+              onIndicatorLayout={measureIndicator}
             >
               <FireIcon
                 size={26}
-                color={activeTab === 'flame' ? '#FFFFFF' : '#D0D7D7'}
+                color={
+                  activeTab === "flame"
+                    ? "#FFFFFF"
+                    : "#D0D7D7"
+                }
               />
             </TabItem>
 
             {/* 2. Search */}
             <TabItem
-              isActive={activeTab === 'search'}
-              onPress={() => handleTabPress('search')}
+              tabKey="search"
+              isActive={activeTab === "search"}
+              onPress={() => handleTabPress("search")}
+              registerIndicatorRef={registerIndicatorRef}
+              onIndicatorLayout={measureIndicator}
             >
               <SearchIcon
                 size={23}
-                color={activeTab === 'search' ? '#FFFFFF' : '#D0D7D7'}
+                color={
+                  activeTab === "search"
+                    ? "#FFFFFF"
+                    : "#D0D7D7"
+                }
               />
             </TabItem>
 
-            {/* 3. Center Map Pin (Featured) */}
+            {/* 3. Center Map */}
             <TabItem
-              isActive={activeTab === 'map'}
-              onPress={() => handleTabPress('map')}
+              tabKey="map"
+              isActive={activeTab === "map"}
+              onPress={() => handleTabPress("map")}
               isCenter
+              registerIndicatorRef={registerIndicatorRef}
+              onIndicatorLayout={measureIndicator}
             >
               <View style={{ marginTop: 10 }}>
-                <MapPinCenterIcon size={52} active={activeTab === 'map'} />
+                <MapPinCenterIcon
+                  size={52}
+                  active={activeTab === "map"}
+                />
               </View>
             </TabItem>
 
-            {/* 4. Heart with Badge */}
+            {/* 4. Favorites */}
             <TabItem
-              isActive={activeTab === 'favorites'}
-              onPress={() => handleTabPress('favorites')}
+              tabKey="favorites"
+              isActive={activeTab === "favorites"}
+              onPress={() => handleTabPress("favorites")}
+              registerIndicatorRef={registerIndicatorRef}
+              onIndicatorLayout={measureIndicator}
             >
               <View style={styles.iconWithBadge}>
                 <HeartIcon
                   size={26}
-                  color={activeTab === 'favorites' ? '#FFFFFF' : '#D0D7D7'}
+                  color={
+                    activeTab === "favorites"
+                      ? "#FFFFFF"
+                      : "#D0D7D7"
+                  }
                 />
+
                 {favoritesBadgeCount > 0 && (
                   <View style={styles.badge}>
                     <Text style={styles.badgeText}>
-                      {favoritesBadgeCount > 99 ? '99+' : favoritesBadgeCount}
+                      {favoritesBadgeCount > 99
+                        ? "99+"
+                        : favoritesBadgeCount}
                     </Text>
                   </View>
                 )}
@@ -158,87 +460,168 @@ export default function AppTabs({
 
             {/* 5. Profile */}
             <TabItem
-              isActive={activeTab === 'profile'}
-              onPress={() => handleTabPress('profile')}
+              tabKey="profile"
+              isActive={activeTab === "profile"}
+              onPress={() => handleTabPress("profile")}
+              registerIndicatorRef={registerIndicatorRef}
+              onIndicatorLayout={measureIndicator}
             >
               <ProfileIcon
                 size={25}
-                color={activeTab === 'profile' ? '#FFFFFF' : '#D0D7D7'}
+                color={
+                  activeTab === "profile"
+                    ? "#FFFFFF"
+                    : "#D0D7D7"
+                }
               />
             </TabItem>
           </>
         ) : (
-          /* ==================================================== */
-          /* MENU 2 : ETABLISSEMENT (ETAB)                        */
-          /* ==================================================== */
           <>
-            {/* 1. Stats / Dashboard */}
+            {/* 1. Stats */}
             <TabItem
-              isActive={activeTab === 'stats'}
-              onPress={() => handleTabPress('stats')}
+              tabKey="stats"
+              isActive={activeTab === "stats"}
+              onPress={() => handleTabPress("stats")}
+              registerIndicatorRef={registerIndicatorRef}
+              onIndicatorLayout={measureIndicator}
             >
               <StatsIcon
                 size={24}
-                color={activeTab === 'stats' ? '#FFFFFF' : '#D0D7D7'}
+                color={
+                  activeTab === "stats"
+                    ? "#FFFFFF"
+                    : "#D0D7D7"
+                }
               />
             </TabItem>
 
-            {/* 2. Calendar / Agenda */}
+            {/* 2. Calendar */}
             <TabItem
-              isActive={activeTab === 'calendar'}
-              onPress={() => handleTabPress('calendar')}
+              tabKey="calendar"
+              isActive={activeTab === "calendar"}
+              onPress={() => handleTabPress("calendar")}
+              registerIndicatorRef={registerIndicatorRef}
+              onIndicatorLayout={measureIndicator}
             >
               <CalendarCheckIcon
                 size={25}
-                color={activeTab === 'calendar' ? '#FFFFFF' : '#D0D7D7'}
+                color={
+                  activeTab === "calendar"
+                    ? "#FFFFFF"
+                    : "#D0D7D7"
+                }
               />
             </TabItem>
 
-            {/* 3. Center Plus (Featured Create) */}
+            {/* 3. Center Create */}
             <TabItem
-              isActive={activeTab === 'create'}
-              onPress={() => handleTabPress('create')}
+              tabKey="create"
+              isActive={activeTab === "create"}
+              onPress={() => handleTabPress("create")}
               isCenter
+              registerIndicatorRef={registerIndicatorRef}
+              onIndicatorLayout={measureIndicator}
             >
               <PlusCenterIcon size={56} />
             </TabItem>
 
-            {/* 4. Favorites / Activity */}
+            {/* 4. Favorites */}
             <TabItem
-              isActive={activeTab === 'favorites'}
-              onPress={() => handleTabPress('favorites')}
+              tabKey="favorites"
+              isActive={activeTab === "favorites"}
+              onPress={() => handleTabPress("favorites")}
+              registerIndicatorRef={registerIndicatorRef}
+              onIndicatorLayout={measureIndicator}
             >
               <HeartIcon
                 size={26}
-                color={activeTab === 'favorites' ? '#FFFFFF' : '#D0D7D7'}
+                color={
+                  activeTab === "favorites"
+                    ? "#FFFFFF"
+                    : "#D0D7D7"
+                }
               />
             </TabItem>
 
-            {/* 5. Profile / Account */}
+            {/* 5. Profile */}
             <TabItem
-              isActive={activeTab === 'profile'}
-              onPress={() => handleTabPress('profile')}
+              tabKey="profile"
+              isActive={activeTab === "profile"}
+              onPress={() => handleTabPress("profile")}
+              registerIndicatorRef={registerIndicatorRef}
+              onIndicatorLayout={measureIndicator}
             >
               <ProfileIcon
                 size={25}
-                color={activeTab === 'profile' ? '#FFFFFF' : '#D0D7D7'}
+                color={
+                  activeTab === "profile"
+                    ? "#FFFFFF"
+                    : "#D0D7D7"
+                }
               />
             </TabItem>
           </>
         )}
+
+        {/* =====================================================
+            SLIDING INDICATOR
+        ====================================================== */}
+
+        <Animated.View
+          pointerEvents="none"
+          style={[
+            styles.slidingIndicatorWrapper,
+            {
+              opacity: isIndicatorReady ? 1 : 0,
+              transform: [
+                { translateX },
+                { translateY },
+              ],
+            },
+          ]}
+        >
+          <Animated.View
+            style={[
+              styles.slidingIndicator,
+              {
+                width: indicatorWidth,
+                height: indicatorHeight,
+              },
+            ]}
+          />
+        </Animated.View>
       </View>
     </View>
   );
 }
+
+// ============================================================
+// TAB ITEM
+// ============================================================
 
 interface TabItemProps {
   children: React.ReactNode;
   isActive: boolean;
   onPress: () => void;
   isCenter?: boolean;
+  tabKey: TabKey;
+  registerIndicatorRef: (
+    key: TabKey,
+    node: View | null
+  ) => void;
+  onIndicatorLayout: (key: TabKey) => void;
 }
 
-function TabItem({ children, isActive, onPress, isCenter }: TabItemProps) {
+function TabItem({
+  children,
+  isActive,
+  onPress,
+  isCenter,
+  tabKey,
+  registerIndicatorRef,
+  onIndicatorLayout,
+}: TabItemProps) {
   return (
     <Pressable
       onPress={onPress}
@@ -247,137 +630,207 @@ function TabItem({ children, isActive, onPress, isCenter }: TabItemProps) {
         isCenter && styles.tabItemCenter,
         pressed && styles.tabItemPressed,
       ]}
-      hitSlop={{ top: isCenter ? 28 : 10, bottom: 10, left: 8, right: 8 }}
+      hitSlop={{
+        top: isCenter ? 28 : 10,
+        bottom: 10,
+        left: 8,
+        right: 8,
+      }}
       accessibilityRole="button"
-      accessibilityState={{ selected: isActive }}
+      accessibilityState={{
+        selected: isActive,
+      }}
     >
-      {/* Icon — center icons float above the pill via negative marginTop */}
-      <View style={[styles.iconWrapper, isCenter && styles.centerIconWrapper]}>
+      {/* Icon */}
+      <View
+        style={[
+          styles.iconWrapper,
+          isCenter && styles.centerIconWrapper,
+        ]}
+      >
         {children}
       </View>
 
-      {/* Active teal underline bar */}
+      {/* Invisible measurement anchor */}
       <View
+        ref={(node) =>
+          registerIndicatorRef(tabKey, node)
+        }
+        onLayout={() =>
+          onIndicatorLayout(tabKey)
+        }
         style={[
           styles.indicator,
           isCenter && styles.indicatorCenter,
-          isActive ? styles.indicatorActive : styles.indicatorInactive,
         ]}
       />
     </Pressable>
   );
 }
 
+// ============================================================
+// STYLES
+// ============================================================
+
 const styles = StyleSheet.create({
   wrapper: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     right: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     zIndex: 1000,
   },
+
   pillContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#0A1414',
-    width: '76%',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+
+    backgroundColor: "#0A1414",
+
+    width: "76%",
     maxWidth: 410,
     height: 66,
+
     borderRadius: 35,
+
     paddingHorizontal: 20,
-    // Shadow dark mode — halo blanc subtil
-    shadowColor: '#FFFFFF',
-    shadowOffset: { width: 0, height: 0 },
+
+    shadowColor: "#FFFFFF",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
     shadowOpacity: 0.08,
     shadowRadius: 20,
+
     elevation: 10,
-    // Web fallback — boxShadow CSS
+
     ...Platform.select({
       web: {
-        boxShadow: '0 0 24px 0 rgba(255, 255, 255, 0.10)',
+        boxShadow:
+          "0 0 24px 0 rgba(255, 255, 255, 0.10)",
       },
     }),
-    // overflow visible so center circle can bubble above the pill
-    overflow: 'visible',
+
+    overflow: "visible",
   },
+
   tabItem: {
     flex: 1,
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    height: "100%",
+
+    alignItems: "center",
+    justifyContent: "center",
+
     paddingVertical: 4,
   },
+
   tabItemCenter: {
-    // allow the center button to extend above the pill
-    overflow: 'visible',
-    justifyContent: 'flex-end',
+    overflow: "visible",
+    justifyContent: "flex-end",
     paddingBottom: 6,
     zIndex: 10,
   },
+
   tabItemPressed: {
     opacity: 0.8,
     transform: [{ scale: 0.95 }],
   },
+
   iconWrapper: {
     height: 42,
-    alignItems: 'center',
-    justifyContent: 'center',
+
+    alignItems: "center",
+    justifyContent: "center",
   },
+
   centerIconWrapper: {
-    // Negative marginTop makes the circle pop above the pill top edge
     marginTop: -26,
     height: 62,
-    alignItems: 'center',
-    justifyContent: 'center',
+
+    alignItems: "center",
+    justifyContent: "center",
   },
+
   iconWithBadge: {
-    position: 'relative',
-    alignItems: 'center',
-    justifyContent: 'center',
+    position: "relative",
+
+    alignItems: "center",
+    justifyContent: "center",
   },
+
   badge: {
-    position: 'absolute',
+    position: "absolute",
+
     top: -5,
     right: -8,
-    backgroundColor: '#007B7B',
+
+    backgroundColor: "#007B7B",
+
     minWidth: 18,
     height: 18,
+
     borderRadius: 9,
-    alignItems: 'center',
-    justifyContent: 'center',
+
+    alignItems: "center",
+    justifyContent: "center",
+
     paddingHorizontal: 3,
+
     borderWidth: 1.5,
-    borderColor: '#0A1414',
+    borderColor: "#0A1414",
   },
+
   badgeText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
+
     fontSize: 10.5,
-    fontWeight: '800',
-    textAlign: 'center',
+    fontWeight: "800",
+
+    textAlign: "center",
+
     includeFontPadding: false,
     lineHeight: 12,
   },
+
+  // Invisible anchor used ONLY for measurement
   indicator: {
     width: 15,
     marginLeft: 6,
+
     height: 3.2,
+
     borderRadius: 2,
+
     marginTop: 2,
+
+    opacity: 0,
   },
+
   indicatorCenter: {
-    // Indicateur doublé pour les tabs centraux (map / plus)
     width: 30,
     marginLeft: 13,
+
     height: 3.4,
+
     borderRadius: 3.2,
+
     marginTop: 3,
   },
-  indicatorActive: {
-    backgroundColor: '#007B7B',
+
+  slidingIndicatorWrapper: {
+    position: "absolute",
+
+    left: 0,
+    top: 0,
+
+    zIndex: 5,
   },
-  indicatorInactive: {
-    backgroundColor: 'transparent',
+
+  slidingIndicator: {
+    backgroundColor: "#007B7B",
+    borderRadius: 3,
   },
 });

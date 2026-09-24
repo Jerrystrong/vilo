@@ -177,14 +177,14 @@ export default function NightBackground({
       <G>
         <Path
           d="M309 55C294.088 55 282 67.0883 282 82C282 96.9117 294.088 109 309 109C314.352 109 319.372 107.441 323.6 104.76C317.742 106.631 311.06 106.413 304.938 103.92C295.102 99.912 288 90.041 288 78.5C288 68.477 293.47 59.733 301.56 55.196C303.943 55.067 306.438 55 309 55Z"
-          fill="#DCE8F2"
+          fill="#E2ECEB"
         />
 
         <Circle
           cx={315}
           cy={74}
           r={19}
-          fill="#080F1F"
+          fill="#151E1E"
         />
       </G>
 
@@ -193,7 +193,7 @@ export default function NightBackground({
       >
         <Path
           d="M45 59L120 45L180 90L230 35"
-          stroke="#2B4A67"
+          stroke="#244240"
           strokeWidth={0.8}
           strokeDasharray="1.5 3.5"
           strokeLinecap="round"
@@ -201,14 +201,14 @@ export default function NightBackground({
 
         <Path
           d="M180 90L220 53"
-          stroke="#40566F"
+          stroke="#3A5E5C"
           strokeWidth={0.8}
           strokeLinecap="round"
         />
 
         <Path
           d="M144 105L180 90"
-          stroke="#182C43"
+          stroke="#1C3230"
           strokeWidth={0.8}
           strokeLinecap="round"
         />
@@ -217,28 +217,28 @@ export default function NightBackground({
           cx={45}
           cy={59}
           r={1}
-          fill="#7EA0C1"
+          fill="#7DA8A5"
         />
 
         <Circle
           cx={120}
           cy={45}
           r={1.2}
-          fill="#E7EDF3"
+          fill="#E2EFEF"
         />
 
         <Circle
           cx={180}
           cy={90}
           r={1}
-          fill="#7897B4"
+          fill="#759C99"
         />
 
         <Circle
           cx={230}
           cy={35}
           r={1}
-          fill="#E5EBF0"
+          fill="#E0ECEB"
         />
       </AnimatedG>
 
@@ -246,7 +246,7 @@ export default function NightBackground({
         cx={69}
         cy={140}
         r={1}
-        fill="#DDE6EF"
+        fill="#DEEAE8"
         opacity={star1}
       />
 
@@ -254,7 +254,7 @@ export default function NightBackground({
         cx={250}
         cy={150}
         r={1}
-        fill="#C9D5E0"
+        fill="#C5D8D6"
         opacity={star2}
       />
 
@@ -262,7 +262,7 @@ export default function NightBackground({
         cx={160}
         cy={180}
         r={1.6}
-        fill="#DCE6EF"
+        fill="#DBEAE8"
         opacity={star3}
       />
 
@@ -278,7 +278,7 @@ export default function NightBackground({
         cx={210}
         cy={260}
         r={0.9}
-        fill="#DDE7F0"
+        fill="#DCEAE8"
         opacity={star5}
       />
 
@@ -286,7 +286,7 @@ export default function NightBackground({
         cx={340}
         cy={310}
         r={1}
-        fill="#B9CCDE"
+        fill="#B2C9C7"
         opacity={star6}
       />
 
@@ -294,7 +294,7 @@ export default function NightBackground({
         cx={140}
         cy={350}
         r={1.5}
-        fill="#E1E8EF"
+        fill="#DFECEB"
         opacity={star7}
       />
 
@@ -302,7 +302,7 @@ export default function NightBackground({
         cx={310}
         cy={370}
         r={0.8}
-        fill="#7EA5C7"
+        fill="#769E9B"
         opacity={star8}
       />
 
@@ -318,7 +318,7 @@ export default function NightBackground({
         cx={110}
         cy={480}
         r={0.8}
-        fill="#BFD0DF"
+        fill="#B7CCC9"
         opacity={star4}
       />
 
@@ -326,7 +326,7 @@ export default function NightBackground({
         cx={180}
         cy={530}
         r={1.6}
-        fill="#DDE6EF"
+        fill="#DBEAE8"
         opacity={star5}
       />
 
@@ -334,7 +334,7 @@ export default function NightBackground({
         cx={330}
         cy={560}
         r={0.9}
-        fill="#E7EDF3"
+        fill="#E2EFEF"
         opacity={star7}
       />
 
@@ -342,7 +342,7 @@ export default function NightBackground({
         cx={25}
         cy={500}
         r={0.9}
-        fill="#DDE7EF"
+        fill="#DBEAE7"
         opacity={star3}
       />
 
@@ -350,7 +350,7 @@ export default function NightBackground({
         cx={230}
         cy={410}
         r={0.7}
-        fill="#8FAAC2"
+        fill="#84A8A5"
         opacity={star6}
       />
 
@@ -370,7 +370,7 @@ export default function NightBackground({
       >
         <Path
           d="M60 205V215M55 210H65"
-          stroke="#456F95"
+          stroke="#3C6D6A"
           strokeWidth={1}
           strokeLinecap="round"
         />
@@ -381,7 +381,7 @@ export default function NightBackground({
       >
         <Path
           d="M330 453V465M324 459H336"
-          stroke="#6D747D"
+          stroke="#5E7371"
           strokeWidth={1}
           strokeLinecap="round"
         />
@@ -392,7 +392,7 @@ export default function NightBackground({
       >
         <Path
           d="M120 39V51M114 45H126"
-          stroke="#E9EEF3"
+          stroke="#E4EFEF"
           strokeWidth={1}
           strokeLinecap="round"
         />
@@ -407,10 +407,10 @@ export default function NightBackground({
           y2={600}
           gradientUnits="userSpaceOnUse"
         >
-          <Stop offset={0} stopColor="#111827" />
-          <Stop offset={0.3} stopColor="#0D1728" />
-          <Stop offset={0.65} stopColor="#0A1322" />
-          <Stop offset={1} stopColor="#050B15" />
+          <Stop offset={0} stopColor="#172222" />
+          <Stop offset={0.3} stopColor="#141C1C" />
+          <Stop offset={0.65} stopColor="#121818" />
+          <Stop offset={1} stopColor="#0B1010" />
         </LinearGradient>
 
         <RadialGradient
@@ -423,17 +423,17 @@ export default function NightBackground({
         >
           <Stop
             offset={0}
-            stopColor="#DCE8F2"
-            stopOpacity={0.28}
+            stopColor="#E2F1EF"
+            stopOpacity={0.25}
           />
           <Stop
             offset={0.45}
-            stopColor="#BFD3E5"
-            stopOpacity={0.12}
+            stopColor="#A8C8C6"
+            stopOpacity={0.10}
           />
           <Stop
             offset={1}
-            stopColor="#8FAAC2"
+            stopColor="#588582"
             stopOpacity={0}
           />
         </RadialGradient>
