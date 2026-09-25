@@ -1,26 +1,14 @@
-import React from 'react';
+import { StyleSheet, useColorScheme, View } from "react-native";
 
-import {
-  View,
-  StyleSheet,
-} from 'react-native';
+import EstablishmentMarker from "./EstablishmentMarker";
+import RadarSvg from "./RadarSvg";
 
-import RadarSvg from './RadarSvg';
-import EstablishmentMarker from './EstablishmentMarker';
+import { RadarEstablishment } from "./radar.types";
 
-import {
-  RadarEstablishment,
-} from './radar.types';
+import { RADAR_HEIGHT, RADAR_PADDING, RADAR_WIDTH } from "./radar.constants";
 
-import {
-  RADAR_WIDTH,
-  RADAR_HEIGHT,
-  RADAR_PADDING,
-} from './radar.constants';
-
-import {
-  useCompassHeading,
-} from './useCompassMotion';
+import UserIcon from "@/assets/svg/userIcon";
+import { useCompassHeading } from "./useCompassMotion";
 
 type EstablishmentRadarProps = {
   establishments: RadarEstablishment[];
@@ -32,27 +20,18 @@ export default function EstablishmentRadar({
   establishments,
   width = RADAR_WIDTH,
 }: EstablishmentRadarProps) {
+  const colorScheme = useColorScheme();
+  const scale = width / RADAR_WIDTH;
 
-  const scale =
-    width / RADAR_WIDTH;
+  const radarWidth = RADAR_WIDTH * scale;
 
-  const radarWidth =
-    RADAR_WIDTH * scale;
+  const radarHeight = RADAR_HEIGHT * scale;
 
-  const radarHeight =
-    RADAR_HEIGHT * scale;
+  const stageWidth = radarWidth + RADAR_PADDING * 2;
 
-  const stageWidth =
-    radarWidth +
-    RADAR_PADDING * 2;
+  const stageHeight = radarHeight + RADAR_PADDING * 2;
 
-  const stageHeight =
-    radarHeight +
-    RADAR_PADDING * 2;
-
-  const {
-    heading,
-  } = useCompassHeading();
+  const { heading } = useCompassHeading();
 
   return (
     <View
@@ -64,7 +43,6 @@ export default function EstablishmentRadar({
         },
       ]}
     >
-
       {/* ==================================================
           RADAR FIXE
       ================================================== */}
@@ -81,25 +59,20 @@ export default function EstablishmentRadar({
           },
         ]}
       >
-
         <RadarSvg />
 
         {/* ==================================================
             ÉTABLISSEMENTS
         ================================================== */}
 
-        {establishments.map(
-          (establishment) => (
-            <EstablishmentMarker
-              key={establishment.id}
-              establishment={establishment}
-              heading={heading}
-            />
-          ),
-        )}
-
+        {establishments.map((establishment) => (
+          <EstablishmentMarker
+            key={establishment.id}
+            establishment={establishment}
+            heading={heading}
+          />
+        ))}
       </View>
-
 
       {/* ==================================================
           UTILISATEUR FIXE
@@ -110,52 +83,40 @@ export default function EstablishmentRadar({
         style={[
           styles.user,
           {
-            left:
-              RADAR_PADDING +
-              radarWidth / 2 -
-              22,
+            left: RADAR_PADDING + radarWidth / 2 - 22,
 
-            top:
-              RADAR_PADDING +
-              radarHeight / 2 -
-              22,
+            top: RADAR_PADDING + radarHeight / 2 - 22,
           },
         ]}
       >
-        <View style={styles.userCircle}>
-
-          <View style={styles.head} />
-
-          <View style={styles.body} />
-
+        <View className="dark:bg-transparent bg-[#111827] w-[45px] h-[45px] rounded-full flex-row items-center justify-center">
+          <UserIcon stroke="#E5E7EB" />
         </View>
       </View>
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-
   stage: {
-    position: 'relative',
-    alignSelf: 'center',
-    overflow: 'visible',
+    position: "relative",
+    alignSelf: "center",
+    overflow: "visible",
   },
 
   radar: {
-    position: 'absolute',
-    overflow: 'visible',
+    position: "absolute",
+    overflow: "visible",
   },
 
   user: {
-    position: 'absolute',
+    position: "absolute",
 
     width: 44,
     height: 44,
 
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   userCircle: {
@@ -164,14 +125,14 @@ const styles = StyleSheet.create({
 
     borderRadius: 22,
 
-    backgroundColor: '#111827',
+    backgroundColor: "#111827",
 
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   head: {
-    position: 'absolute',
+    position: "absolute",
 
     top: 11,
 
@@ -181,11 +142,11 @@ const styles = StyleSheet.create({
     borderRadius: 4,
 
     borderWidth: 1.5,
-    borderColor: '#E5E7EB',
+    borderColor: "#E5E7EB",
   },
 
   body: {
-    position: 'absolute',
+    position: "absolute",
 
     bottom: 8,
 
@@ -198,7 +159,6 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderBottomWidth: 0,
 
-    borderColor: '#E5E7EB',
+    borderColor: "#E5E7EB",
   },
-
 });

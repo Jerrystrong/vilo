@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from "react-native";
+
 export type EstablishmentType =
   | 'restaurant'
   | 'bar'
@@ -8,6 +10,7 @@ export type RadarEstablishment = {
   id: string;
 
   type: EstablishmentType;
+  name: string;
 
   /**
    * Position sur le radar.
@@ -37,4 +40,6 @@ export type RadarEstablishment = {
    * Taille de l'icône.
    */
   size?: number;
+  image?: ImageSourcePropType;
+  location?: string;
 };

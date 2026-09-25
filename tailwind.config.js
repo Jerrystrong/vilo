@@ -13,10 +13,13 @@ module.exports = {
         light_color: "#F5F8F7",
         hotLight: "#F8F6F3",
         seconday: "#CC4500",
+        icon_tint: "#4B5563",
       },
       fontFamily: {
         "open-sans": "open-sans",
         "open-sans-bold": "open-sans-bold",
+        inter: "inter",
+        "inter-bold": "inter-bold",
       },
     },
   },
