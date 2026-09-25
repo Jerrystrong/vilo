@@ -1,5 +1,6 @@
 import "../global.css";
 
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AnimatedSplashOverlay } from "@/components/animated-icon";
 import AppTabs from "@/components/app-tabs";
 import { RoleProvider, useUserRole } from "@/context/role-context";
@@ -41,6 +42,8 @@ function AppLayout() {
   const [loaded, error] = useFonts({
     "open-sans": require("../../assets/fonts/OpenSans_Condensed-Regular.ttf"),
     "open-sans-bold": require("../../assets/fonts/OpenSans_Condensed-Bold.ttf"),
+    "inter": require("../../assets/fonts/Inter_28pt-Regular.ttf"),
+    "inter-bold": require("../../assets/fonts/Inter_24pt-Bold.ttf")
   });
 
   useEffect(() => {
@@ -80,10 +83,12 @@ function AppLayout() {
  */
 export default function TabLayout() {
   return (
-    <RoleProvider>
-      <TabProvider>
-        <AppLayout />
-      </TabProvider>
-    </RoleProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <RoleProvider>
+        <TabProvider>
+          <AppLayout />
+        </TabProvider>
+      </RoleProvider>
+    </GestureHandlerRootView>
   );
 }

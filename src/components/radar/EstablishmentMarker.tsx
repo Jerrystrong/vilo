@@ -1,36 +1,29 @@
-import React from 'react';
-
-import {
-  Image,
-  StyleSheet,
-} from 'react-native';
+import { Image, StyleSheet, View } from "react-native";
 
 import Animated, {
-  SharedValue,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
+    SharedValue,
+    useAnimatedStyle,
+} from "react-native-reanimated";
 
+import { RadarEstablishment } from "./radar.types";
+
+import BarIcon from "@/assets/svg/barIcon";
+import RestaurantIcon from "@/assets/svg/restaurantIcon";
 import {
-  RadarEstablishment,
-} from './radar.types';
+    RADAR_CENTER_X,
+    RADAR_CENTER_Y,
+    RADAR_ORBITS,
+} from "./radar.constants";
 
-import {
-  RADAR_CENTER_X,
-  RADAR_CENTER_Y,
-  RADAR_ORBITS,
-} from './radar.constants';
+const ESTABLISHMENT_ICONS = {
+  restaurant: require("@/assets/svg/restaurantIcon"),
 
+  bar: require("@/assets/svg/barIcon"),
 
-const ESTABLISHMENT_IMAGES = {
-  restaurant: require("@/assets/images/Vector (2).png"),
+  hotel: require("@/assets/svg/barIcon"),
 
-  bar: require("@/assets/images/Vector (1).png"),
-
-  hotel: require("@/assets/images/Vector (1).png"),
-
-  tourist: require("@/assets/images/Vector (1).png"),
+  tourist: require("@/assets/svg/barIcon"),
 };
-
 
 type Props = {
   establishment: RadarEstablishment;
@@ -38,45 +31,21 @@ type Props = {
   heading: SharedValue<number>;
 };
 
+export default function EstablishmentMarker({ establishment, heading }: Props) {
+  const { orbit, angle, distance = 1, size = 34 } = establishment;
 
-export default function EstablishmentMarker({
-  establishment,
-  heading,
-}: Props) {
-
-  const {
-    orbit,
-    angle,
-    distance = 1,
-    size = 34,
-  } = establishment;
-
-
-  const orbitData =
-    RADAR_ORBITS[orbit];
-
+  const orbitData = RADAR_ORBITS[orbit];
 
   /**
    * Position originale.
    */
-  const initialAngle =
-    angle *
-    (Math.PI / 180);
-
+  const initialAngle = angle * (Math.PI / 180);
 
   const initialX =
-    RADAR_CENTER_X +
-    Math.cos(initialAngle) *
-    orbitData.rx *
-    distance;
-
+    RADAR_CENTER_X + Math.cos(initialAngle) * orbitData.rx * distance;
 
   const initialY =
-    RADAR_CENTER_Y +
-    Math.sin(initialAngle) *
-    orbitData.ry *
-    distance;
-
+    RADAR_CENTER_Y + Math.sin(initialAngle) * orbitData.ry * distance;
 
   /**
    * ---------------------------------------------------------
@@ -84,63 +53,33 @@ export default function EstablishmentMarker({
    * ---------------------------------------------------------
    */
 
-  const animatedStyle =
-    useAnimatedStyle(() => {
+  const animatedStyle = useAnimatedStyle(() => {
+    /**
+     * Rotation actuelle de CET établissement.
+     */
+    const currentAngle = initialAngle - heading.value * (Math.PI / 180);
 
-      /**
-       * Rotation actuelle de CET établissement.
-       */
-      const currentAngle =
-        initialAngle -
-        heading.value *
-          (Math.PI / 180);
+    /**
+     * Nouvelle position sur son orbite.
+     */
+    const x = RADAR_CENTER_X + Math.cos(currentAngle) * orbitData.rx * distance;
 
+    const y = RADAR_CENTER_Y + Math.sin(currentAngle) * orbitData.ry * distance;
 
-      /**
-       * Nouvelle position sur son orbite.
-       */
-      const x =
-        RADAR_CENTER_X +
-        Math.cos(currentAngle) *
-        orbitData.rx *
-        distance;
+    return {
+      transform: [
+        {
+          translateX: x - initialX,
+        },
 
+        {
+          translateY: y - initialY,
+        },
+      ],
+    };
+  });
 
-      const y =
-        RADAR_CENTER_Y +
-        Math.sin(currentAngle) *
-        orbitData.ry *
-        distance;
-
-
-      return {
-
-        transform: [
-
-          {
-            translateX:
-              x -
-              initialX,
-          },
-
-          {
-            translateY:
-              y -
-              initialY,
-          },
-
-        ],
-
-      };
-
-    });
-
-
-  const image =
-    ESTABLISHMENT_IMAGES[
-      establishment.type
-    ];
-
+  const icon = ESTABLISHMENT_ICONS[establishment.type];
 
   return (
     <Animated.View
@@ -148,13 +87,9 @@ export default function EstablishmentMarker({
         styles.marker,
 
         {
-          left:
-            initialX -
-            size / 2,
+          left: initialX - size / 2,
 
-          top:
-            initialY -
-            size / 2,
+          top: initialY - size / 2,
 
           width: size,
           height: size,
@@ -163,28 +98,31 @@ export default function EstablishmentMarker({
         animatedStyle,
       ]}
     >
-
       <Image
-        source={image}
+        source={establishment.image}
         resizeMode="contain"
         style={{
           width: size,
           height: size,
         }}
       />
-
+      <View className=" absolute bottom-0 -right-1 items-center justify-center bg-black rounded-full w-[18px] h-[18px]">
+        {establishment.type === "restaurant" && (
+          <RestaurantIcon fill="#ffffff" width={12} height={12} />
+        )}
+        {establishment.type === "bar" && (
+          <BarIcon fill="#ffffff" width={12} height={12} />
+        )}
+      </View>
     </Animated.View>
   );
 }
 
-
 const styles = StyleSheet.create({
-
   marker: {
-    position: 'absolute',
+    position: "absolute",
 
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
-
 });
