@@ -22,6 +22,7 @@ import {
   PlusCenterIcon,
 } from "./tab-icons";
 import { UserRole, useUserRole } from "@/context/role-context";
+import { useTheme } from "@/hooks/use-theme";
 
 export type UserTabKey =
   | "flame"
@@ -53,6 +54,7 @@ interface IndicatorMetrics {
   height: number;
 }
 
+
 const SLIDE_DURATION = 260;
 const SLIDE_EASING = Easing.out(Easing.cubic);
 
@@ -65,6 +67,7 @@ export default function AppTabs({
   const context = useUserRole();
   const currentRole: UserRole = propRole ?? context.role ?? "user";
   const insets = useSafeAreaInsets();
+const theme = useTheme()
 
   // ------------------------------------------------------------
   // ACTIVE TAB
@@ -371,7 +374,7 @@ export default function AppTabs({
       <View
         ref={pillRef}
         onLayout={handlePillLayout}
-        style={styles.pillContainer}
+        style={[styles.pillContainer, {shadowColor: theme.text }]}
       >
         {currentRole === "user" ? (
           <>
@@ -695,17 +698,15 @@ const styles = StyleSheet.create({
 
     borderRadius: 35,
 
-    paddingHorizontal: 20,
-
-    shadowColor: "#FFFFFF",
+    paddingHorizontal: 20, 
     shadowOffset: {
       width: 0,
       height: 0,
     },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.2,
     shadowRadius: 20,
 
-    elevation: 10,
+    elevation: 5,
 
     ...Platform.select({
       web: {
