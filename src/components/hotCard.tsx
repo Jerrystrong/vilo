@@ -1,8 +1,9 @@
 import BarIcon from "@/assets/svg/barIcon";
 import RestaurantIcon from "@/assets/svg/restaurantIcon";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Image, StyleSheet, Text, useColorScheme, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, useColorScheme, View } from "react-native";
 import { RadarEstablishment } from "./radar/radar.types";
+import { router } from "expo-router";
 
 interface HotCardProps {
   card: RadarEstablishment;
@@ -16,7 +17,13 @@ export default function HotCard({ card, variant = "compact" }: HotCardProps) {
   const secondaryTextColor = colorScheme === "dark" ? "#D0D7D7" : "#60646C";
 
   return (
-    <View
+    <Pressable
+    onPress={() =>
+      router.push({
+        pathname: "/screens/[etab]",
+        params: {id : card.id},
+      })
+    }
       style={[
         styles.card,
         isDetailed && styles.detailedCard,
@@ -63,7 +70,7 @@ export default function HotCard({ card, variant = "compact" }: HotCardProps) {
           </View>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
 

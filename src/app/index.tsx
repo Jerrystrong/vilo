@@ -9,7 +9,7 @@ import { RadarEstablishment } from "@/components/radar/radar.types";
 import { ThemedView } from "@/components/themed-view";
 import { LinearGradient } from "expo-linear-gradient";
 import { cssInterop } from "nativewind";
-import { useEffect } from "react";
+import { useEffect } from "react"; 
 import {
   Dimensions,
   Image,

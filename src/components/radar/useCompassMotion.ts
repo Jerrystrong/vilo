@@ -1,6 +1,5 @@
+import * as Location from "expo-location";
 import { useEffect } from "react";
-import { Platform } from "react-native";
-import { Magnetometer } from "expo-sensors";
 import {
   Easing,
   useSharedValue,
@@ -25,59 +24,61 @@ function shortestDelta(current: number, previous: number) {
   return delta;
 }
 
-function headingFromMagnetometer(x: number, y: number) {
-  const angle = (Math.atan2(y, x) * 180) / Math.PI;
-
-  // Les axes renvoyés par les capteurs natifs ne sont pas orientés de la
-  // même façon sur Android et iOS. On les ramène à 0° = nord, dans le sens
-  // horaire, pour que le radar ait le même comportement sur les deux OS.
-  return normalizeAngle(Platform.OS === "ios" ? angle - 90 : 90 - angle);
-}
-
 export function useCompassHeading() {
   const heading = useSharedValue(0);
 
   useEffect(() => {
     let mounted = true;
+    let subscription: Location.LocationSubscription | null = null;
     let previousHeading: number | null = null;
     let accumulatedHeading = 0;
-    let subscription: ReturnType<typeof Magnetometer.addListener> | null = null;
 
     const start = async () => {
-      const isAvailable = await Magnetometer.isAvailableAsync();
+      // Android ne démarre pas l'écoute de la boussole sans autorisation de
+      // localisation, même pour le cap magnétique. Sans ceci, l'API échoue
+      // silencieusement et le radar reste immobile.
+      const { status } = await Location.requestForegroundPermissionsAsync();
 
-      if (!mounted || !isAvailable) {
+      if (!mounted || status !== "granted") {
         return;
       }
 
-      Magnetometer.setUpdateInterval(100);
-      subscription = Magnetometer.addListener(({ x, y }) => {
-        if (!mounted || !Number.isFinite(x) || !Number.isFinite(y)) {
-          return;
-        }
+      subscription = await Location.watchHeadingAsync(
+        ({ magHeading }) => {
+          if (!mounted || !Number.isFinite(magHeading)) {
+            return;
+          }
 
-        const nextHeading = headingFromMagnetometer(x, y);
+          const nextHeading = normalizeAngle(magHeading);
 
-        if (previousHeading === null) {
+          if (previousHeading === null) {
+            previousHeading = nextHeading;
+            accumulatedHeading = nextHeading;
+            heading.value = nextHeading;
+            return;
+          }
+
+          const delta = shortestDelta(nextHeading, previousHeading);
           previousHeading = nextHeading;
-          accumulatedHeading = nextHeading;
-          heading.value = nextHeading;
-          return;
-        }
 
-        const delta = shortestDelta(nextHeading, previousHeading);
-        previousHeading = nextHeading;
+          if (Math.abs(delta) < 1) {
+            return;
+          }
 
-        if (Math.abs(delta) < 1) {
-          return;
-        }
+          accumulatedHeading += delta;
+          heading.value = withTiming(accumulatedHeading, {
+            duration: 120,
+            easing: Easing.out(Easing.quad),
+          });
+        },
+        () => {
+          heading.value = 0;
+        },
+      );
 
-        accumulatedHeading += delta;
-        heading.value = withTiming(accumulatedHeading, {
-          duration: 120,
-          easing: Easing.out(Easing.quad),
-        });
-      });
+      if (!mounted) {
+        subscription.remove();
+      }
     };
 
     start().catch(() => {
