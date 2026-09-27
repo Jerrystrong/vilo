@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import {
     Easing,
     useSharedValue,
-    withTiming
+    withTiming,
 } from 'react-native-reanimated';
 
 function normalizeAngle(angle: number) {
@@ -33,6 +33,24 @@ function shortestDelta(
     return delta;
 }
 
+/**
+ * Arrondit une valeur à un nombre précis
+ * de décimales.
+ *
+ * Exemple :
+ * -54.46035 -> -54.5
+ * -54.52958 -> -54.5
+ * -54.58015 -> -54.6
+ */
+function roundValue(
+    value: number,
+    decimals = 1,
+) {
+    const factor = Math.pow(10, decimals);
+
+    return Math.round(value * factor) / factor;
+}
+
 export function useCompassHeading() {
     const heading = useSharedValue(0);
 
@@ -44,9 +62,32 @@ export function useCompassHeading() {
 
         let mounted = true;
 
+        /**
+         * Dernières valeurs X/Y réellement
+         * utilisées pour calculer un angle.
+         */
+        let previousX: number | null = null;
+        let previousY: number | null = null;
+
+        /**
+         * Dernier angle réellement utilisé.
+         */
         let previousHeading: number | null = null;
 
+        /**
+         * Angle accumulé permettant de tourner
+         * naturellement au-delà de 360°.
+         */
         let accumulatedHeading = 0;
+
+        /**
+         * Seuil minimal de changement d'angle.
+         *
+         * Tant que le téléphone ne bouge pas
+         * d'au moins cette valeur, on ne déplace
+         * pas les établissements.
+         */
+        const ANGLE_THRESHOLD = 0.8;
 
         const start = async () => {
             const available =
@@ -56,6 +97,9 @@ export function useCompassHeading() {
                 return;
             }
 
+            /**
+             * 60 FPS environ.
+             */
             Magnetometer.setUpdateInterval(16);
 
             subscription =
@@ -69,39 +113,70 @@ export function useCompassHeading() {
                         }
 
                         /**
-                         * Angle du téléphone par rapport
-                         * au champ magnétique.
+                         * --------------------------------
+                         * 1. QUANTIFICATION X / Y
+                         * --------------------------------
+                         *
+                         * On ignore les micro-variations
+                         * du capteur.
                          */
-                        // console.log("x", x);
-                        // console.log("y", y);
-                        let angle =
-                            Math.atan2(
-                                y,
-                                x,
-                            ) *
-                            (180 / Math.PI);
-                        // console.log("Angle avant normalisation", angle);
-                        angle =
-                            normalizeAngle(
-                                angle + 90,
-                            );
-                        // console.log("Angle après normalisation", angle);
+                        const roundedX =
+                            roundValue(x, 1);
+
+                        const roundedY =
+                            roundValue(y, 1);
 
                         /**
-                         * Première valeur.
+                         * Si X et Y n'ont pas suffisamment
+                         * changé, on ne fait absolument
+                         * rien.
+                         */
+                        if (
+                            previousX === roundedX &&
+                            previousY === roundedY
+                        ) {
+                            return;
+                        }
+
+                        previousX = roundedX;
+                        previousY = roundedY;
+
+                        /**
+                         * --------------------------------
+                         * 2. CALCUL DE L'ANGLE
+                         * --------------------------------
+                         */
+                        let angle =
+                            Math.atan2(
+                                roundedY,
+                                roundedX,
+                            ) *
+                            (180 / Math.PI);
+
+                        angle = normalizeAngle(
+                            angle + 90,
+                        );
+
+                        /**
+                         * --------------------------------
+                         * 3. PREMIÈRE VALEUR
+                         * --------------------------------
                          */
                         if (
                             previousHeading === null
                         ) {
-                            previousHeading =
-                                angle;
+                            previousHeading = angle;
+                            accumulatedHeading = angle;
+
+                            heading.value = angle;
 
                             return;
                         }
 
                         /**
-                         * Petite différence entre
-                         * l'ancien et le nouveau cap.
+                         * --------------------------------
+                         * 4. DIFFÉRENCE ANGULAIRE
+                         * --------------------------------
                          */
                         const delta =
                             shortestDelta(
@@ -109,34 +184,47 @@ export function useCompassHeading() {
                                 previousHeading,
                             );
 
-                        previousHeading =
-                            angle;
+                        /**
+                         * On mémorise le nouvel angle
+                         * du capteur.
+                         */
+                        previousHeading = angle;
 
                         /**
-                         * Accumulation.
+                         * --------------------------------
+                         * 5. IGNORER LES MICRO-MOUVEMENTS
+                         * --------------------------------
                          */
-                        accumulatedHeading +=
-                            delta;
+                        if (
+                            Math.abs(delta) <
+                            ANGLE_THRESHOLD
+                        ) {
+                            return;
+                        }
 
                         /**
-                         * Animation très douce.
+                         * --------------------------------
+                         * 6. ACCUMULATION
+                         * --------------------------------
                          */
-                        // heading.value =
-                        //     withSpring(
-                        //         accumulatedHeading,
-                        //         {
-                        //             damping: 25,
-                        //             stiffness: 180,
-                        //             mass: 0.6,
-                        //         },
-                        //     );
-                        heading.value = withTiming(
-                            accumulatedHeading,
-                            {
-                                duration: 140,
-                                easing: Easing.out(Easing.quad),
-                            }
-                        );
+                        accumulatedHeading += delta;
+
+                        /**
+                         * --------------------------------
+                         * 7. TRANSITION FLUIDE
+                         * --------------------------------
+                         */
+                        heading.value =
+                            withTiming(
+                                accumulatedHeading,
+                                {
+                                    duration: 140,
+                                    easing:
+                                        Easing.out(
+                                            Easing.quad,
+                                        ),
+                                },
+                            );
                     },
                 );
         };
@@ -145,6 +233,7 @@ export function useCompassHeading() {
 
         return () => {
             mounted = false;
+
             subscription?.remove();
         };
     }, []);
