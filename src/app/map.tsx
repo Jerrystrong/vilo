@@ -1,8 +1,13 @@
+import BarIcon from "@/assets/svg/barIcon";
+import RestaurantIcon from "@/assets/svg/restaurantIcon";
 import EstablishmentsMap from "@/components/establishments-map";
-import { FireIcon } from "@/components/tab-icons";
+import MapEstablishmentCard from "@/components/map-establishment-card";
+import BuildingIcon, { FireIcon } from "@/components/tab-icons";
 import { establishments } from "@/data/establishments";
 import Feather from "@expo/vector-icons/Feather";
+import { BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet";
 import { router } from "expo-router";
+import { useEffect, useMemo, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,9 +15,16 @@ import {
   useColorScheme,
   View,
 } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 export default function MapScreen() {
   const colorScheme = useColorScheme();
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const snapPoints = useMemo(() => ["25%", "75%"], []);
+
+  useEffect(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
   return (
     <View style={styles.container}>
       <EstablishmentsMap establishments={establishments} />
@@ -34,14 +46,11 @@ export default function MapScreen() {
               <Text className="font-bold text-[21px] dark:text-whiteBg text-darkBg">
                 Map
               </Text>
-              {/* <Text style={styles.subtitle}>
-              {establishments.length} lieux sur la carte
-            </Text> */}
             </View>
           </View>
           <View>
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={() => bottomSheetModalRef.current?.present()}
               className="bg-whiteBg dark:blackBg p-2 rounded-full flex items-center justify-center"
               style={{
                 boxShadow: `0px 4px 4px ${colorScheme === "dark" ? "#25272D" : "#D1D5DB"}`,
@@ -53,6 +62,80 @@ export default function MapScreen() {
           </View>
         </View>
       </SafeAreaView>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        snapPoints={snapPoints}
+        enableDynamicSizing={false}
+        backgroundStyle={{
+          backgroundColor: colorScheme === "dark" ? "#121818" : "#FFFFFF",
+        }}
+        handleIndicatorStyle={{
+          backgroundColor: colorScheme === "dark" ? "#769E9B" : "#A8C0C0",
+        }}
+      >
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingHorizontal: 12,
+            gap: 12,
+            height: 36,
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => {}}
+            className="bg-primary_color rounded-full px-5 py-2 w-fit h-fit "
+          >
+            <Text className="font-bold text-[16px] text-whiteBg">Tous</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {}}
+            className="bg-[#E5E7EB] dark:bg-[#7F8288] rounded-full px-3 py-2 w-fit h-fit flex flex-row items-center gap-2"
+          >
+            <RestaurantIcon
+              fill={colorScheme === "dark" ? "#F3F4F6" : "rgba(17, 24, 39)"}
+              width={16}
+              height={16}
+            />
+            <Text className="text-[16px] text-[rgba(17, 24, 39)] opacity-70  dark:text-[#F3F4F6]">
+              Restaurant
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {}}
+            className="bg-[#E5E7EB] dark:bg-[#7F8288] rounded-full px-3 py-2 w-fit h-fit flex flex-row items-center gap-2"
+          >
+            <BarIcon
+              fill={colorScheme === "dark" ? "#F3F4F6" : "rgba(17, 24, 39)"}
+              width={16}
+              height={16}
+            />
+            <Text className="text-[16px] text-[rgba(17, 24, 39)] opacity-70  dark:text-[#F3F4F6]">
+              Bar
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {}}
+            className="bg-[#E5E7EB] dark:bg-[#7F8288] rounded-full px-3 py-2 w-fit h-fit flex flex-row items-center gap-2"
+          >
+            <BuildingIcon
+              fill={colorScheme === "dark" ? "#F3F4F6" : "rgba(17, 24, 39)"}
+              width={16}
+              height={16}
+            />
+            <Text className="text-[16px] text-[rgba(17, 24, 39)] opacity-70 dark:text-[#F3F4F6]">
+              Hôtel
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
+        <BottomSheetFlatList
+          data={establishments}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.sheetList}
+          renderItem={({ item }) => <MapEstablishmentCard establishment={item} />}
+          ItemSeparatorComponent={() => <View style={styles.listSeparator} />}
+        />
+      </BottomSheetModal>
     </View>
   );
 }
@@ -100,5 +183,27 @@ const styles = StyleSheet.create({
     color: "#111827",
     fontSize: 17,
     fontWeight: "700",
+  },
+  // bottomsheet style
+  sheetHeader: {
+    paddingHorizontal: 24,
+    paddingTop: 8,
+  },
+  sheetTitle: {
+    fontFamily: "inter-bold",
+    fontSize: 20,
+    lineHeight: 25,
+  },
+  sheetSubtitle: {
+    fontFamily: "inter",
+    fontSize: 14,
+    marginTop: 4,
+  },
+  sheetList: {
+    padding: 24,
+    paddingTop: 18,
+  },
+  listSeparator: {
+    height: 12,
   },
 });

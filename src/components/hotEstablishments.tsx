@@ -88,7 +88,7 @@ export default function HotEstablishments({
   const { width: screenWidth } = useWindowDimensions();
   const colorScheme = useColorScheme();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ["72%"], []);
+  const snapPoints = useMemo(() => ["25%", "75%"], []);
 
   // Largeur disponible dans le conteneur parent
   const containerWidth = screenWidth - HORIZONTAL_PADDING;
