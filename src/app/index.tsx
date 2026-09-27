@@ -5,9 +5,10 @@ import LocationIcon from "@/assets/svg/locationIcon";
 import BellNotificationIcon from "@/assets/svg/notificationIcon";
 import HotEstablishments from "@/components/hotEstablishments";
 import EstablishmentRadar from "@/components/radar/EstablishmentRadar";
-import { RadarEstablishment } from "@/components/radar/radar.types";
 import { ThemedView } from "@/components/themed-view";
+import { establishments } from "@/data/establishments";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import { cssInterop } from "nativewind";
 import { useEffect } from "react";
 import {
@@ -30,62 +31,6 @@ import Animated, {
 } from "react-native-reanimated";
 cssInterop(LinearGradient, { className: "style" });
 const MAP_LABEL_WIDTH = 122;
-const establishments: RadarEstablishment[] = [
-  {
-    id: "1",
-    type: "restaurant",
-    name: "Big bite",
-    orbit: 1,
-    angle: 320,
-    size: 34,
-    image: require("@/assets/images/bigbite.png"),
-    location: "Gombe",
-  },
-
-  {
-    id: "2",
-    type: "restaurant",
-    name: "Big bite mall",
-    orbit: 2,
-    angle: 40,
-    size: 34,
-    image: require("@/assets/images/bbmal.png"),
-    location: "kinshasa",
-  },
-
-  {
-    id: "3",
-    type: "bar",
-    name: "Le club",
-    orbit: 1,
-    angle: 145,
-    size: 34,
-    image: require("@/assets/images/leclub.png"),
-    location: "Lemba",
-  },
-  {
-    id: "4",
-    type: "bar",
-    name: "Bibi bar",
-    orbit: 1,
-    angle: 101,
-    size: 34,
-    image: require("@/assets/images/bigbite.png"),
-    location: "matonge",
-  },
-
-  {
-    id: "6",
-    type: "bar",
-    name: "Les jeunes",
-    orbit: 3,
-    angle: 15,
-    size: 34,
-    image: require("@/assets/images/bbmal.png"),
-    location: "Gombe",
-  },
-];
-
 const dimension = Dimensions.get("window");
 const height = dimension.height;
 export default function HomeScreen() {
@@ -148,7 +93,7 @@ export default function HomeScreen() {
           enableTilt
         />
         <TouchableOpacity
-          onPress={() => {}}
+          onPress={() => router.push("/map")}
           className="absolute bottom-[12%] right-2"
         >
           <View className="bg-[#9CA3AF] rounded-full px-3 py-3 flex-row items-center">
