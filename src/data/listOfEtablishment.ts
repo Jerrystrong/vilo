@@ -1,0 +1,70 @@
+type listEtablishment={
+    id: String,
+    type: String,
+    name: String,
+    image: any,
+    location: String,
+    coordinates: {
+        latitude: number,
+        longitude: number,
+    },
+    menu?:any[]
+}
+export const listOfEtablishment:listEtablishment[] = [
+  {
+    id: "1",
+    type: "restaurant",
+    name: "Big bite",
+    image: require("@/assets/images/bigbite.png"),
+    location: "Gombe",
+    coordinates: { latitude: -4.3158, longitude: 15.2985 },
+  },
+  {
+    id: "2",
+    type: "restaurant",
+    name: "Big bite mall",
+    image: require("@/assets/images/bbmal.png"),
+    location: "Kinshasa",
+    coordinates: { latitude: -4.3215, longitude: 15.3112 },
+  },
+  {
+    id: "3",
+    type: "bar",
+    name: "Le club",
+    image: require("@/assets/images/leclub.png"),
+    location: "Lemba",
+    coordinates: { latitude: -4.3269, longitude: 15.3056 },
+  },
+  {
+    id: "4",
+    type: "bar",
+    name: "Bibi bar",
+    image: require("@/assets/images/bigbite.png"),
+    location: "Matonge",
+    coordinates: { latitude: -4.3165, longitude: 15.3077 },
+  },
+  {
+    id: "6",
+    type: "bar",
+    name: "Les jeunes",
+    image: require("@/assets/images/bbmal.png"),
+    location: "Gombe",
+    coordinates: { latitude: -4.3109, longitude: 15.3021 },
+  },
+  {
+    id: "7",
+    type: "bar",
+    name: "Blue bar",
+    image: require("@/assets/images/bar.png"),
+    location: "Gombe",
+    coordinates: { latitude: -4.3158, longitude: 15.2985 },
+  },
+  {
+    id: "8",
+    type: "hotel",
+    name: "Gold hotel",
+    image: require("@/assets/images/hotel.png"),
+    location: "Gombe",
+    coordinates: { latitude: -4.3158, longitude: 15.2985 },
+  },
+]; 
