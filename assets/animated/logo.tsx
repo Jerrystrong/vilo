@@ -189,7 +189,7 @@ export default function LocationAnimation({ onFinish }: LocationAnimationProps =
            * centré au-dessus de l'extrémité creusée.
            */
           left: 123,
-          top: 47,
+          top: 41,
 
           width: 24,
           height: 32,

@@ -1,80 +1,63 @@
 import BarIcon from "@/assets/svg/barIcon";
 import RestaurantIcon from "@/assets/svg/restaurantIcon";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Image, Text, useColorScheme, View } from "react-native";
+import { Image, StyleSheet, Text, useColorScheme, View } from "react-native";
 import { RadarEstablishment } from "./radar/radar.types";
 
 interface HotCardProps {
   card: RadarEstablishment;
+  variant?: "compact" | "detailed";
 }
 
-export default function HotCard({ card }: HotCardProps) {
+export default function HotCard({ card, variant = "compact" }: HotCardProps) {
   const colorScheme = useColorScheme();
+  const isDetailed = variant === "detailed";
+  const textColor = colorScheme === "dark" ? "#F4F7F6" : "#121818";
+  const secondaryTextColor = colorScheme === "dark" ? "#D0D7D7" : "#60646C";
+
   return (
     <View
-      style={{
-        height: 60,
-        borderRadius: 70,
-        borderWidth: 1,
-        borderColor: colorScheme === "dark" ? "#9CA3AF" : "#9CA3AF",
-        paddingHorizontal: 25,
-        flexDirection: "row",
-        alignItems: "center",
-        paddingRight: 9,
-        paddingLeft: 9,
-        width: "100%",
-        gap: 9,
-        overflow: "hidden",
-      }}
-      className=" dark:bg-blackBg bg-whiteBg"
+      style={[
+        styles.card,
+        isDetailed && styles.detailedCard,
+        {
+          backgroundColor: colorScheme === "dark" ? "#121818" : "#FFFFFF",
+          borderColor: colorScheme === "dark" ? "#3A5E5C" : "#E2E5EA",
+        },
+      ]}
     >
-      {/* image */}
       <Image
         source={card.image}
-        width={32}
-        height={32}
         resizeMode="cover"
-        className="w-[32px] h-[32px]"
+        style={[styles.image, isDetailed && styles.detailedImage]}
       />
-      <View>
-        {/* nom */}
-        <Text className="font-bold dark:text-whiteBg text-blackBg">
+      <View style={styles.content}>
+        <Text
+          numberOfLines={1}
+          style={[styles.name, isDetailed && styles.detailedName, { color: textColor }]}
+        >
           {card.name}
         </Text>
-        <View className="flex flex-row gap-1 items-center justify-between mt-2">
-          {/* catégorie */}
+        <View style={styles.metadata}>
           {card.type === "restaurant" && (
-            <View className="flex flex-row gap-1 items-center">
-              <RestaurantIcon
-                fill={colorScheme === "dark" ? "#fff" : "#121818"}
-                width={12}
-                height={12}
-              />
-              <Text className="dark:text-whiteBg text-blackBg text-[11px]">
-                Resto
-              </Text>
+            <View style={styles.metadataItem}>
+              <RestaurantIcon fill={secondaryTextColor} width={14} height={14} />
+              <Text style={[styles.metadataText, isDetailed && styles.detailedMetadataText, { color: secondaryTextColor }]}>Resto</Text>
             </View>
           )}
           {card.type === "bar" && (
-            <View className="flex flex-row gap-1 items-center">
-              <BarIcon
-                fill={colorScheme === "dark" ? "#fff" : "#121818"}
-                width={12}
-                height={12}
-              />
-              <Text className="dark:text-whiteBg text-blackBg text-[11px]">
-                Bar
-              </Text>
+            <View style={styles.metadataItem}>
+              <BarIcon fill={secondaryTextColor} width={14} height={14} />
+              <Text style={[styles.metadataText, isDetailed && styles.detailedMetadataText, { color: secondaryTextColor }]}>Bar</Text>
             </View>
           )}
-          {/* localisation */}
-          <View className="flex flex-row gap-1 items-center">
+          <View style={styles.metadataItem}>
             <Ionicons
               name="location-outline"
-              size={12}
-              color={colorScheme === "dark" ? "#fff" : "#121818"}
+              size={14}
+              color={secondaryTextColor}
             />
-            <Text className="dark:text-whiteBg text-blackBg text-[11px]">
+            <Text numberOfLines={1} style={[styles.metadataText, { color: secondaryTextColor }]}>
               {card.location}
             </Text>
           </View>
@@ -83,3 +66,67 @@ export default function HotCard({ card }: HotCardProps) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  card: {
+    alignItems: "center",
+    borderRadius: 38,
+    borderWidth: 2,
+    flexDirection: "row",
+    gap: 10,
+    height: 70,
+    overflow: "hidden",
+    paddingHorizontal: 10,
+    width: "100%",
+  },
+  detailedCard: {
+    height: 88,
+    paddingHorizontal: 14,
+  },
+  image: {
+    borderRadius: 24,
+    height: 48,
+    width: 48,
+  },
+  detailedImage: {
+    borderRadius: 28,
+    height: 56,
+    width: 56,
+  },
+  content: {
+    flex: 1,
+    minWidth: 0,
+  },
+  name: {
+    fontFamily: "inter-bold",
+    fontSize: 16,
+    lineHeight: 20,
+  },
+  detailedName: {
+    fontSize: 18,
+    lineHeight: 23,
+  },
+  metadata: {
+    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 2,
+    marginTop: 5,
+  },
+  metadataItem: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 4,
+    maxWidth: "100%",
+  },
+  metadataText: {
+    fontFamily: "inter",
+    fontSize: 10,
+    lineHeight: 16,
+  },
+  detailedMetadataText:{
+    fontFamily: "inter",
+    fontSize: 12.,
+    lineHeight: 16,
+  }
+});
