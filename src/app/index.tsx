@@ -1,6 +1,7 @@
 import DarkHotBg from "@/assets/svg/darkHotBg";
 import LandscapeIcon from "@/assets/svg/landScapeIcon";
 import LightHotFont from "@/assets/svg/lightHotFont";
+import LocationIcon from "@/assets/svg/locationIcon";
 import BellNotificationIcon from "@/assets/svg/notificationIcon";
 import HotEstablishments from "@/components/hotEstablishments";
 import EstablishmentRadar from "@/components/radar/EstablishmentRadar";
@@ -8,17 +9,27 @@ import { RadarEstablishment } from "@/components/radar/radar.types";
 import { ThemedView } from "@/components/themed-view";
 import { LinearGradient } from "expo-linear-gradient";
 import { cssInterop } from "nativewind";
+import { useEffect } from "react";
 import {
   Dimensions,
   Image,
   Platform,
   StyleSheet,
   Text,
+  TouchableOpacity,
   useColorScheme,
   View,
 } from "react-native";
-import { useSharedValue } from "react-native-reanimated";
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated";
 cssInterop(LinearGradient, { className: "style" });
+const MAP_LABEL_WIDTH = 122;
 const establishments: RadarEstablishment[] = [
   {
     id: "1",
@@ -76,10 +87,26 @@ const establishments: RadarEstablishment[] = [
 ];
 
 const dimension = Dimensions.get("window");
-const height = dimension.height; 
+const height = dimension.height;
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
-  const progress = useSharedValue<number>(0);
+  const mapLabelProgress = useSharedValue(0);
+  const mapLabelStyle = useAnimatedStyle(() => ({
+    width: MAP_LABEL_WIDTH * mapLabelProgress.value,
+    opacity: mapLabelProgress.value,
+    marginRight: 4 * mapLabelProgress.value,
+  }));
+
+  useEffect(() => {
+    mapLabelProgress.value = withSequence(
+      withTiming(1, { duration: 280, easing: Easing.out(Easing.cubic) }),
+      withDelay(
+        3000,
+        withTiming(0, { duration: 280, easing: Easing.in(Easing.cubic) }),
+      ),
+    );
+  }, [mapLabelProgress]);
+
   return (
     <ThemedView
       className="flex-1 bg-whiteBg dark:bg-blackBg"
@@ -120,6 +147,19 @@ export default function HomeScreen() {
           width={340}
           enableTilt
         />
+        <TouchableOpacity
+          onPress={() => {}}
+          className="absolute bottom-[12%] right-2"
+        >
+          <View className="bg-[#9CA3AF] rounded-full px-3 py-3 flex-row items-center">
+            <Animated.View className="overflow-hidden" style={mapLabelStyle}>
+              <Text className="text-whiteBg text-[13px]" numberOfLines={1}>
+                Ouvrir sur une map
+              </Text>
+            </Animated.View>
+            <LocationIcon color="white" size={18} />
+          </View>
+        </TouchableOpacity>
       </View>
       {/* radar end */}
       {/* listed nearest etablishment */}
@@ -128,19 +168,6 @@ export default function HomeScreen() {
           Plus près de vous
         </Text>
         <View className="mt-3">
-          {/* <Carousel
-            width={330}
-            height={140}
-            data={establishments}
-            renderItem={({ item }) => <HotCard card={item} />}
-            mode="parallax"
-            progress={progress}
-            modeConfig={{
-              parallaxScrollingScale: 0.92,
-              parallaxScrollingOffset: 45,
-              parallaxAdjacentItemScale: 0.85,
-            }}
-          /> */}
           <HotEstablishments establishments={establishments} />
         </View>
       </View>
@@ -176,7 +203,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     overflow: "visible",
-
     zIndex: 20,
+    position: "relative",
   },
 });
