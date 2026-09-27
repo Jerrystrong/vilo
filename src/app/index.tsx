@@ -46,7 +46,7 @@ export default function HomeScreen() {
     mapLabelProgress.value = withSequence(
       withTiming(1, { duration: 280, easing: Easing.out(Easing.cubic) }),
       withDelay(
-        3000,
+        6000,
         withTiming(0, { duration: 280, easing: Easing.in(Easing.cubic) }),
       ),
     );
