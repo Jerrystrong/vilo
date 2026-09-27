@@ -85,8 +85,8 @@ const styles = StyleSheet.create({
   },
   image: {
     borderRadius: 24,
-    height: 48,
-    width: 48,
+    height: 30,
+    width: 30,
   },
   detailedImage: {
     borderRadius: 28,
@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
   metadata: {
     alignItems: "center",
     flexDirection: "row",
-    flexWrap: "wrap",
     gap: 2,
     marginTop: 5,
   },

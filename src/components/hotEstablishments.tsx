@@ -92,7 +92,7 @@ export default function HotEstablishments({
 
   // Largeur disponible dans le conteneur parent
   const containerWidth = screenWidth - HORIZONTAL_PADDING;
-  const carouselWidth = containerWidth - LIST_BUTTON_SIZE - GAP;
+  const carouselWidth = containerWidth - GAP;
 
   // Deux cartes visibles exactement
   const cardWidth = (carouselWidth - GAP) / 2;
@@ -218,6 +218,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.14,
     shadowRadius: 10,
     width: LIST_BUTTON_SIZE,
+    position: "absolute",
+    right: 0,
   },
   sheetHeader: {
     paddingHorizontal: 24,
