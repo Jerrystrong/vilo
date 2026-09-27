@@ -178,7 +178,14 @@ export default function HotEstablishments({
         ref={bottomSheetModalRef}
         snapPoints={snapPoints}
         enableDynamicSizing={false}
-        backgroundStyle={{ backgroundColor: colorScheme === "dark" ? "#121818" : "#FFFFFF" }}
+        backgroundStyle={{
+          backgroundColor: colorScheme === "dark" ? "#121818" : "#FFFFFF",
+          borderTopLeftRadius: 32,
+          borderTopRightRadius: 32,
+          borderColor: '#769E9B',
+          borderWidth: 2,
+          overflow: "hidden",
+        }}
         handleIndicatorStyle={{ backgroundColor: colorScheme === "dark" ? "#769E9B" : "#A8C0C0" }}
       >
         <View style={styles.sheetHeader}>

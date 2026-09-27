@@ -7,14 +7,14 @@ interface TabContextType {
 }
 
 const TabContext = createContext<TabContextType>({
-  activeTab: 'flame',
+  activeTab: 'map',
   setActiveTab: () => {},
 });
 
 export function TabProvider({ children }: { children: React.ReactNode }) {
   const { role } = useUserRole();
   const [activeTab, setActiveTab] = useState<string>(
-    role === 'user' ? 'flame' : 'stats'
+    role === 'user' ? 'map' : 'stats'
   );
 
   return (

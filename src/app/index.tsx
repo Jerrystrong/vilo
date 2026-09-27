@@ -10,7 +10,7 @@ import { establishments } from "@/data/establishments";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { cssInterop } from "nativewind";
-import { useEffect } from "react";
+import { useEffect } from "react"; 
 import {
   Dimensions,
   Image,

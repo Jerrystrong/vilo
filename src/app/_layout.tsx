@@ -7,7 +7,15 @@ import AppTabs from "@/components/app-tabs";
 import { RoleProvider, useUserRole } from "@/context/role-context";
 import { TabProvider, useActiveTab } from "@/context/tab-context";
 import { useFonts } from "expo-font";
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
+import {
+  DarkTheme,
+  DefaultTheme,
+  Href,
+  Stack,
+  ThemeProvider,
+  usePathname,
+  useRouter,
+} from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
@@ -21,12 +29,51 @@ SplashScreen.preventAutoHideAsync();
 function PersistentTabs() {
   const { role } = useUserRole();
   const { activeTab, setActiveTab } = useActiveTab();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const userRoutes: Record<string, Href> = {
+    flame: "/feed",
+    // La page sera disponible dès que src/app/explore.tsx sera ajoutée.
+    explore: "/explore" as Href,
+    map: "/",
+    favorites: "/message",
+    profile: "/user",
+  };
+
+  useEffect(() => {
+    if (role !== "user") {
+      return;
+    }
+
+    const activeRoute = Object.entries(userRoutes).find(
+      ([, route]) => route === pathname,
+    );
+
+    if (activeRoute && activeRoute[0] !== activeTab) {
+      setActiveTab(activeRoute[0]);
+    }
+  }, [activeTab, pathname, role, setActiveTab]);
+
+  const handleTabChange = (tabKey: string) => {
+    setActiveTab(tabKey);
+
+    const route = userRoutes[tabKey];
+    if (route && route !== pathname) {
+      router.replace(route);
+    }
+  };
+
+  // Ne pas afficher la barre d'onglets sur les écrans secondaires/détails
+  if (pathname.startsWith("/screens")) {
+    return null;
+  }
 
   return (
     <AppTabs
       role={role}
       activeTab={activeTab}
-      onTabChange={setActiveTab}
+      onTabChange={handleTabChange}
       favoritesBadgeCount={8}
     />
   );
