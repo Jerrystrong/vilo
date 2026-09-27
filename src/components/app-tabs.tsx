@@ -423,7 +423,7 @@ const theme = useTheme()
               registerIndicatorRef={registerIndicatorRef}
               onIndicatorLayout={measureIndicator}
             >
-              <View style={{ marginTop: 10 }}>
+              <View style={{ marginTop: 20 }}>
                 <MapPinCenterIcon
                   size={52}
                   active={activeTab === "map"}
@@ -818,7 +818,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 3.2,
 
-    marginTop: 2,
+    marginTop: 6,
   },
 
   slidingIndicatorWrapper: {

@@ -11,6 +11,7 @@ import { cssInterop } from "nativewind";
 import {
   Dimensions,
   Image,
+  Platform,
   StyleSheet,
   Text,
   useColorScheme,
@@ -75,7 +76,7 @@ const establishments: RadarEstablishment[] = [
 ];
 
 const dimension = Dimensions.get("window");
-const height = dimension.height;
+const height = dimension.height; 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
   const progress = useSharedValue<number>(0);
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
     // left: 0,
     // right: 0,
 
-    height: height-280,
+    height: Platform.OS === "ios" ? height - 350 : height - 280,
 
     alignItems: "center",
     justifyContent: "center",
