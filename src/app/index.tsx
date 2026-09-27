@@ -8,7 +8,14 @@ import { RadarEstablishment } from "@/components/radar/radar.types";
 import { ThemedView } from "@/components/themed-view";
 import { LinearGradient } from "expo-linear-gradient";
 import { cssInterop } from "nativewind";
-import { Image, StyleSheet, Text, useColorScheme, View } from "react-native";
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+} from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 cssInterop(LinearGradient, { className: "style" });
 const establishments: RadarEstablishment[] = [
@@ -67,6 +74,8 @@ const establishments: RadarEstablishment[] = [
   },
 ];
 
+const dimension = Dimensions.get("window");
+const height = dimension.height;
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
   const progress = useSharedValue<number>(0);
@@ -161,11 +170,10 @@ const styles = StyleSheet.create({
     // left: 0,
     // right: 0,
 
-    height: 550,
+    height: height-350,
 
     alignItems: "center",
     justifyContent: "center",
-
     overflow: "visible",
 
     zIndex: 20,
