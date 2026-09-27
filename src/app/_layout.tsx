@@ -1,5 +1,6 @@
 import "../global.css";
 
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AnimatedSplashOverlay } from "@/components/animated-icon";
 import AppTabs from "@/components/app-tabs";
@@ -86,7 +87,9 @@ export default function TabLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <RoleProvider>
         <TabProvider>
-          <AppLayout />
+          <BottomSheetModalProvider>
+            <AppLayout />
+          </BottomSheetModalProvider>
         </TabProvider>
       </RoleProvider>
     </GestureHandlerRootView>
