@@ -292,18 +292,18 @@ export default function LightHotFont({
       <AnimatedG translateX={sunX}>
         <Path
           d="M298 150C316.778 150 332 165.222 332 184C332 202.778 316.778 218 298 218C279.222 218 264 202.778 264 184C264 165.222 279.222 150 298 150Z"
-          fill="#FFF4E0"
+          fill="#fdebbdff"
         />
         <Path
           d="M298 158C312.359 158 324 169.641 324 184C324 198.359 312.359 210 298 210C283.641 210 272 198.359 272 184C272 169.641 283.641 158 298 158Z"
-          fill="#FDE047"
+          fill="#fdeb90ff"
         />
         <G opacity={0.38}>
-          <Path d="M298 136V121" stroke="#FFF4E0" strokeWidth={1.5} strokeLinecap="round" />
-          <Path d="M249 184H232" stroke="#FFF4E0" strokeWidth={1.5} strokeLinecap="round" />
-          <Path d="M263 149L250 136" stroke="#FFF4E0" strokeWidth={1.5} strokeLinecap="round" />
-          <Path d="M263 219L250 232" stroke="#FFF4E0" strokeWidth={1.5} strokeLinecap="round" />
-          <Path d="M333 219L346 232" stroke="#FFF4E0" strokeWidth={1.5} strokeLinecap="round" />
+          <Path d="M298 136V121" stroke="#fadc8fff" strokeWidth={1.5} strokeLinecap="round" />
+          <Path d="M249 184H232" stroke="#fadc8fff" strokeWidth={1.5} strokeLinecap="round" />
+          <Path d="M263 149L250 136" stroke="#fadc8fff" strokeWidth={1.5} strokeLinecap="round" />
+          <Path d="M263 219L250 232" stroke="#fadc8fff" strokeWidth={1.5} strokeLinecap="round" />
+          <Path d="M333 219L346 232" stroke="#fadc8fff" strokeWidth={1.5} strokeLinecap="round" />
         </G>
       </AnimatedG>
 
@@ -400,7 +400,7 @@ export default function LightHotFont({
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(298 184) rotate(90) scale(77)"
         >
-          <Stop offset={0}    stopColor="#FFF4E0" stopOpacity={0.3} />
+          <Stop offset={0}    stopColor="#fadc8fff" stopOpacity={0.3} />
           <Stop offset={0.28} stopColor="#FDE68A" stopOpacity={0.2} />
           <Stop offset={0.58} stopColor="#FEF3C7" stopOpacity={0.1} />
           <Stop offset={1}    stopColor="#FEF3C7" stopOpacity={0}   />
