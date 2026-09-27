@@ -1,5 +1,11 @@
-import React, { useEffect, useRef } from "react";
-import { Animated, Easing, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import { useEffect, useRef } from "react";
+import {
+  Animated,
+  Easing,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
+} from "react-native";
 import Svg, {
   Circle,
   Defs,
@@ -51,7 +57,7 @@ export default function NightBackground({
     const moonGlowAnim = Animated.loop(
       Animated.sequence([
         Animated.timing(moonGlowAlpha, {
-          toValue: 0.30,
+          toValue: 0.3,
           duration: 4500,
           easing: Easing.inOut(Easing.sin),
           useNativeDriver: false,
@@ -62,7 +68,7 @@ export default function NightBackground({
           easing: Easing.inOut(Easing.sin),
           useNativeDriver: false,
         }),
-      ])
+      ]),
     );
 
     // ── Constellation slow pulse ────────────────────────────────────────
@@ -80,7 +86,7 @@ export default function NightBackground({
           easing: Easing.inOut(Easing.sin),
           useNativeDriver: false,
         }),
-      ])
+      ]),
     );
 
     // ── Realistic star twinkle factory ──────────────────────────────────
@@ -92,7 +98,7 @@ export default function NightBackground({
       fadeIn: number,
       fadeOut: number,
       pause: number,
-      delay: number
+      delay: number,
     ) => {
       return Animated.loop(
         Animated.sequence([
@@ -113,7 +119,7 @@ export default function NightBackground({
           }),
           // Hold dim (rest period before next twinkle)
           Animated.delay(pause),
-        ])
+        ]),
       );
     };
 
@@ -121,14 +127,14 @@ export default function NightBackground({
     // Bright stars twinkle subtly; dim stars flicker more dramatically
     const starAnims = [
       //                 value  min   max   fadeIn fadeOut pause  delay
-      createTwinkle(star1, 0.15, 0.90,  800,  1200,  2200,    0),   // quick bright flash
-      createTwinkle(star2, 0.08, 0.65, 1400,  1800,  3500,  600),   // slow dim twinkle
-      createTwinkle(star3, 0.25, 1.00,  900,  1100,  1800,  300),   // vivid, frequent
-      createTwinkle(star4, 0.05, 0.55, 1600,  2200,  4000, 1200),   // faint & slow
-      createTwinkle(star5, 0.20, 0.85, 1100,  1500,  2600,  800),   // medium steady
-      createTwinkle(star6, 0.03, 0.50, 2000,  2800,  3200,  400),   // very faint, long cycle
-      createTwinkle(star7, 0.18, 0.92,  700,   950,  1500, 1500),   // fast shimmer
-      createTwinkle(star8, 0.10, 0.70, 1300,  1700,  3800, 1000),   // moderate, long rest
+      createTwinkle(star1, 0.15, 0.9, 800, 1200, 2200, 0), // quick bright flash
+      createTwinkle(star2, 0.08, 0.65, 1400, 1800, 3500, 600), // slow dim twinkle
+      createTwinkle(star3, 0.25, 1.0, 900, 1100, 1800, 300), // vivid, frequent
+      createTwinkle(star4, 0.05, 0.55, 1600, 2200, 4000, 1200), // faint & slow
+      createTwinkle(star5, 0.2, 0.85, 1100, 1500, 2600, 800), // medium steady
+      createTwinkle(star6, 0.03, 0.5, 2000, 2800, 3200, 400), // very faint, long cycle
+      createTwinkle(star7, 0.18, 0.92, 700, 950, 1500, 1500), // fast shimmer
+      createTwinkle(star8, 0.1, 0.7, 1300, 1700, 3800, 1000), // moderate, long rest
     ];
 
     moonGlowAnim.start();
@@ -141,8 +147,16 @@ export default function NightBackground({
       starAnims.forEach((a) => a.stop());
     };
   }, [
-    star1, star2, star3, star4, star5, star6, star7, star8,
-    moonGlowAlpha, constellationOpacity,
+    star1,
+    star2,
+    star3,
+    star4,
+    star5,
+    star6,
+    star7,
+    star8,
+    moonGlowAlpha,
+    constellationOpacity,
   ]);
 
   return (
@@ -155,42 +169,30 @@ export default function NightBackground({
       style={[StyleSheet.absoluteFill, style]}
       {...props}
     >
-      <Rect
-        x={0}
-        y={0}
-        width={390}
-        height={600}
-        fill="url(#nightBackground)"
-      />
+      <Rect x={0} y={0} width={390} height={600} fill="url(#nightBackground)" />
 
       {/* ── Moon glow halo – subtle breathing ── */}
       <AnimatedG opacity={moonGlowAlpha}>
-        <Circle
-          cx={309}
-          cy={79}
-          r={52}
-          fill="url(#moonGlow)"
-        />
+        <Circle cx={309} cy={79} r={52} fill="url(#moonGlow)" />
       </AnimatedG>
 
       {/* ── Moon body – static ── */}
       <G>
         <Path
-          d="M309 55C294.088 55 282 67.0883 282 82C282 96.9117 294.088 109 309 109C314.352 109 319.372 107.441 323.6 104.76C317.742 106.631 311.06 106.413 304.938 103.92C295.102 99.912 288 90.041 288 78.5C288 68.477 293.47 59.733 301.56 55.196C303.943 55.067 306.438 55 309 55Z"
-          fill="#E2ECEB"
+          d="M306.3 68.8A13.5 13.5 0 1 0 321.5 87.1A12 12 0 0 1 306.3 68.8Z"
+          fill="#E3ECEB"
+          transform="translate(-8 15)"
         />
 
-        <Circle
+        {/* <Circle
           cx={315}
           cy={74}
           r={19}
           fill="#151E1E"
-        />
+        /> */}
       </G>
 
-      <AnimatedG
-        opacity={constellationOpacity}
-      >
+      <AnimatedG opacity={constellationOpacity}>
         <Path
           d="M45 59L120 45L180 90L230 35"
           stroke="#244240"
@@ -213,50 +215,18 @@ export default function NightBackground({
           strokeLinecap="round"
         />
 
-        <Circle
-          cx={45}
-          cy={59}
-          r={1}
-          fill="#7DA8A5"
-        />
+        <Circle cx={45} cy={59} r={1} fill="#7DA8A5" />
 
-        <Circle
-          cx={120}
-          cy={45}
-          r={1.2}
-          fill="#E2EFEF"
-        />
+        <Circle cx={120} cy={45} r={1.2} fill="#E2EFEF" />
 
-        <Circle
-          cx={180}
-          cy={90}
-          r={1}
-          fill="#759C99"
-        />
+        <Circle cx={180} cy={90} r={1} fill="#759C99" />
 
-        <Circle
-          cx={230}
-          cy={35}
-          r={1}
-          fill="#E0ECEB"
-        />
+        <Circle cx={230} cy={35} r={1} fill="#E0ECEB" />
       </AnimatedG>
 
-      <AnimatedCircle
-        cx={69}
-        cy={140}
-        r={1}
-        fill="#DEEAE8"
-        opacity={star1}
-      />
+      <AnimatedCircle cx={69} cy={140} r={1} fill="#DEEAE8" opacity={star1} />
 
-      <AnimatedCircle
-        cx={250}
-        cy={150}
-        r={1}
-        fill="#C5D8D6"
-        opacity={star2}
-      />
+      <AnimatedCircle cx={250} cy={150} r={1} fill="#C5D8D6" opacity={star2} />
 
       <AnimatedCircle
         cx={160}
@@ -266,13 +236,7 @@ export default function NightBackground({
         opacity={star3}
       />
 
-      <AnimatedCircle
-        cx={30}
-        cy={240}
-        r={1.5}
-        fill="#FFFFFF"
-        opacity={star4}
-      />
+      <AnimatedCircle cx={30} cy={240} r={1.5} fill="#FFFFFF" opacity={star4} />
 
       <AnimatedCircle
         cx={210}
@@ -282,13 +246,7 @@ export default function NightBackground({
         opacity={star5}
       />
 
-      <AnimatedCircle
-        cx={340}
-        cy={310}
-        r={1}
-        fill="#B2C9C7"
-        opacity={star6}
-      />
+      <AnimatedCircle cx={340} cy={310} r={1} fill="#B2C9C7" opacity={star6} />
 
       <AnimatedCircle
         cx={140}
@@ -338,13 +296,7 @@ export default function NightBackground({
         opacity={star7}
       />
 
-      <AnimatedCircle
-        cx={25}
-        cy={500}
-        r={0.9}
-        fill="#DBEAE7"
-        opacity={star3}
-      />
+      <AnimatedCircle cx={25} cy={500} r={0.9} fill="#DBEAE7" opacity={star3} />
 
       <AnimatedCircle
         cx={230}
@@ -354,9 +306,7 @@ export default function NightBackground({
         opacity={star6}
       />
 
-      <AnimatedG
-        opacity={star3}
-      >
+      <AnimatedG opacity={star3}>
         <Path
           d="M280 223V237M273 230H287"
           stroke="#FFFFFF"
@@ -365,9 +315,7 @@ export default function NightBackground({
         />
       </AnimatedG>
 
-      <AnimatedG
-        opacity={star5}
-      >
+      <AnimatedG opacity={star5}>
         <Path
           d="M60 205V215M55 210H65"
           stroke="#3C6D6A"
@@ -376,9 +324,7 @@ export default function NightBackground({
         />
       </AnimatedG>
 
-      <AnimatedG
-        opacity={star1}
-      >
+      <AnimatedG opacity={star1}>
         <Path
           d="M330 453V465M324 459H336"
           stroke="#5E7371"
@@ -387,9 +333,7 @@ export default function NightBackground({
         />
       </AnimatedG>
 
-      <AnimatedG
-        opacity={star7}
-      >
+      <AnimatedG opacity={star7}>
         <Path
           d="M120 39V51M114 45H126"
           stroke="#E4EFEF"
@@ -421,21 +365,9 @@ export default function NightBackground({
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(309 79) rotate(90) scale(52)"
         >
-          <Stop
-            offset={0}
-            stopColor="#E2F1EF"
-            stopOpacity={0.25}
-          />
-          <Stop
-            offset={0.45}
-            stopColor="#A8C8C6"
-            stopOpacity={0.10}
-          />
-          <Stop
-            offset={1}
-            stopColor="#588582"
-            stopOpacity={0}
-          />
+          <Stop offset={0} stopColor="#E2F1EF" stopOpacity={0.25} />
+          <Stop offset={0.45} stopColor="#A8C8C6" stopOpacity={0.1} />
+          <Stop offset={1} stopColor="#588582" stopOpacity={0} />
         </RadialGradient>
       </Defs>
     </Svg>

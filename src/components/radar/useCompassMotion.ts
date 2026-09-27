@@ -72,17 +72,20 @@ export function useCompassHeading() {
                          * Angle du téléphone par rapport
                          * au champ magnétique.
                          */
+                        // console.log("x", x);
+                        // console.log("y", y);
                         let angle =
                             Math.atan2(
                                 y,
                                 x,
                             ) *
                             (180 / Math.PI);
-
+                        // console.log("Angle avant normalisation", angle);
                         angle =
                             normalizeAngle(
                                 angle + 90,
                             );
+                        // console.log("Angle après normalisation", angle);
 
                         /**
                          * Première valeur.

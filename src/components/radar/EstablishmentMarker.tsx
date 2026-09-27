@@ -79,8 +79,6 @@ export default function EstablishmentMarker({ establishment, heading }: Props) {
     };
   });
 
-  const icon = ESTABLISHMENT_ICONS[establishment.type];
-
   return (
     <Animated.View
       style={[

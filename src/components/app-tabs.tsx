@@ -692,7 +692,7 @@ const styles = StyleSheet.create({
 
     backgroundColor: "#0A1414",
 
-    width: "76%",
+    width: "70%",
     maxWidth: 410,
     height: 66,
 
@@ -812,13 +812,13 @@ const styles = StyleSheet.create({
 
   indicatorCenter: {
     width: 30,
-    marginLeft: 13,
+    marginLeft: 12,
 
     height: 3.4,
 
     borderRadius: 3.2,
 
-    marginTop: 3,
+    marginTop: 2,
   },
 
   slidingIndicatorWrapper: {
