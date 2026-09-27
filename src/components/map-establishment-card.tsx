@@ -72,7 +72,7 @@ export default function MapEstablishmentCard({
           <View style={styles.locationRow}>
             <Feather
               name="map-pin"
-              size={22}
+              size={16}
               color={isDark ? "#C4CFCE" : "#6A7173"}
             />
             <Text
@@ -134,15 +134,17 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingHorizontal: 20,
     paddingTop: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
   },
   heading: {
     alignItems: "center",
     flexDirection: "row",
-    gap: 14,
+    gap: 8,
   },
   logo: {
-    height: 104,
-    width: 126,
+    height: 60,
+    width: 60,
   },
   headingContent: {
     flex: 1,
@@ -156,7 +158,7 @@ const styles = StyleSheet.create({
   name: {
     flexShrink: 1,
     fontFamily: "inter-bold",
-    fontSize: 29,
+    fontSize: 21,
     lineHeight: 36,
   },
   typeBadge: {
@@ -182,12 +184,12 @@ const styles = StyleSheet.create({
   location: {
     flex: 1,
     fontFamily: "inter",
-    fontSize: 17,
+    fontSize: 14,
     lineHeight: 23,
   },
   menuTitle: {
     fontFamily: "inter-bold",
-    fontSize: 18,
+    fontSize: 16,
     lineHeight: 24,
     marginTop: 22,
   },
@@ -197,8 +199,8 @@ const styles = StyleSheet.create({
   },
   menuImage: {
     borderRadius: 8,
-    height: 170,
-    width: 146,
+    height: 140,
+    width: 140,
   },
   emptyMenu: {
     alignItems: "center",
