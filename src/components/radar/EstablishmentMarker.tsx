@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import Animated, {
     SharedValue,
@@ -14,6 +14,7 @@ import {
     RADAR_CENTER_Y,
     RADAR_ORBITS,
 } from "./radar.constants";
+import { router } from "expo-router";
 
 const ESTABLISHMENT_ICONS = {
   restaurant: require("@/assets/svg/restaurantIcon"),
@@ -104,14 +105,17 @@ export default function EstablishmentMarker({ establishment, heading }: Props) {
           height: size,
         }}
       />
-      <View className=" absolute bottom-0 -right-1 items-center justify-center bg-black rounded-full w-[18px] h-[18px]">
+      <TouchableOpacity onPress={() => router.push({
+        pathname: "/screens/[etab]",
+        params: { id: establishment.id },
+      })} className=" absolute bottom-0 -right-1 items-center justify-center bg-black rounded-full w-[18px] h-[18px]">
         {establishment.type === "restaurant" && (
           <RestaurantIcon fill="#ffffff" width={12} height={12} />
         )}
         {establishment.type === "bar" && (
           <BarIcon fill="#ffffff" width={12} height={12} />
         )}
-      </View>
+      </TouchableOpacity>
     </Animated.View>
   );
 }

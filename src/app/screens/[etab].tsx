@@ -6,6 +6,7 @@ import { ThemedView } from "@/components/themed-view";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router";
 import { cssInterop } from "nativewind"; 
+import { establishments } from "@/data/establishments";
 import {
   Dimensions,
   Image,
@@ -24,7 +25,7 @@ const height = dimension.height;
 export default function EtabScreen() {
   const colorScheme = useColorScheme(); 
   const { id } = useLocalSearchParams<{ id : string }>(); 
-
+  const etab = establishments.find((etab) => etab.id === id); 
   return (
     <ThemedView
       className="flex-1 bg-whiteBg dark:bg-blackBg"
@@ -36,7 +37,7 @@ export default function EtabScreen() {
       <View className="mt-[50px] mx-4 flex flex-row justify-between items-center">
         <View className="flex flex-row items-center gap-4">
           <Image
-            source={require("@/assets/images/currentUser.png")}
+            source={etab?.image}
             resizeMode="cover"
             width={50}
             height={50}
@@ -45,7 +46,7 @@ export default function EtabScreen() {
           <View>
             <Text className="text-[#9DA3AF] text-[14px]">Bienvenu(e),</Text>
             <Text className="text-2xl font-bold dark:text-whiteBg text-blackBg">
-              Annette
+              {etab?.name} 
             </Text>
           </View>
         </View>

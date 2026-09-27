@@ -64,6 +64,11 @@ function PersistentTabs() {
     }
   };
 
+  // Ne pas afficher la barre d'onglets sur les écrans secondaires/détails
+  if (pathname.startsWith("/screens")) {
+    return null;
+  }
+
   return (
     <AppTabs
       role={role}
