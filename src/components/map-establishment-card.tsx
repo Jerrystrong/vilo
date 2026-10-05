@@ -35,7 +35,10 @@ export default function MapEstablishmentCard({
   const label = typeLabels[establishment.type];
 
   return (
-    <View style={styles.card}>
+    <View
+      style={styles.card}
+      className="border-b-2 dark:border-[#1E2928] border-[#E5E7EB]"
+    >
       <View style={styles.heading}>
         {establishment.image ? (
           <Image
@@ -45,6 +48,7 @@ export default function MapEstablishmentCard({
           />
         ) : null}
         <View style={styles.headingContent}>
+          {/* etablishment name and type */}
           <View style={styles.nameRow}>
             <Text
               numberOfLines={1}
@@ -134,8 +138,6 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingHorizontal: 20,
     paddingTop: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
   },
   heading: {
     alignItems: "center",

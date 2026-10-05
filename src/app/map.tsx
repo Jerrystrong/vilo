@@ -79,18 +79,18 @@ export default function MapScreen() {
           contentContainerStyle={{
             paddingHorizontal: 12,
             gap: 12,
-            height: 36,
+            height: 42,
           }}
         >
           <TouchableOpacity
             onPress={() => {}}
-            className="bg-primary_color rounded-full px-5 py-2 w-fit h-fit "
+            className="bg-primary_color rounded-full px-5 py-2 w-fit h-[36px] justify-center"
           >
             <Text className="font-bold text-[16px] text-whiteBg">Tous</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {}}
-            className="bg-[#E5E7EB] dark:bg-[#7F8288] rounded-full px-3 py-2 w-fit h-fit flex flex-row items-center gap-2"
+            className="bg-[#E5E7EB] dark:bg-[#7F8288] rounded-full px-3 py-2 w-fit h-[36px] flex flex-row items-center gap-2"
           >
             <RestaurantIcon
               fill={colorScheme === "dark" ? "#F3F4F6" : "rgba(17, 24, 39)"}
@@ -103,7 +103,7 @@ export default function MapScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {}}
-            className="bg-[#E5E7EB] dark:bg-[#7F8288] rounded-full px-3 py-2 w-fit h-fit flex flex-row items-center gap-2"
+            className="bg-[#E5E7EB] dark:bg-[#7F8288] rounded-full px-3 py-2 w-fit h-[36px] flex flex-row items-center gap-2"
           >
             <BarIcon
               fill={colorScheme === "dark" ? "#F3F4F6" : "rgba(17, 24, 39)"}
@@ -116,7 +116,7 @@ export default function MapScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {}}
-            className="bg-[#E5E7EB] dark:bg-[#7F8288] rounded-full px-3 py-2 w-fit h-fit flex flex-row items-center gap-2"
+            className="bg-[#E5E7EB] dark:bg-[#7F8288] rounded-full px-3 py-2 w-fit h-[36px] flex flex-row items-center gap-2"
           >
             <BuildingIcon
               fill={colorScheme === "dark" ? "#F3F4F6" : "rgba(17, 24, 39)"}
@@ -132,7 +132,9 @@ export default function MapScreen() {
           data={establishments}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.sheetList}
-          renderItem={({ item }) => <MapEstablishmentCard establishment={item} />}
+          renderItem={({ item }) => (
+            <MapEstablishmentCard establishment={item} />
+          )}
           ItemSeparatorComponent={() => <View style={styles.listSeparator} />}
         />
       </BottomSheetModal>
