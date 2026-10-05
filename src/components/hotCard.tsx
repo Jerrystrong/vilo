@@ -21,7 +21,7 @@ export default function HotCard({ card, variant = "compact" }: HotCardProps) {
     onPress={() =>
       router.push({
         pathname: "/screens/[etab]",
-        params: {id : card.id},
+        params: { etab: card.id },
       })
     }
       style={[

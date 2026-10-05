@@ -27,11 +27,16 @@ export default function MapEstablishmentCard({
 }: MapEstablishmentCardProps) {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
-  const menuImages = establishment.menu?.length
+  const menuImages = /* establishment.menu?.length
     ? establishment.menu
     : establishment.image
       ? [establishment.image]
-      : [];
+      : []; */
+    ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1_O8epLfXAOwRMBVY0tIZei1ZULSSFDCWERM99zyq3TvBCvSDU2RVHEs&s=10",
+                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI0XFuhLuifOhj_h01FQapSn1Jrd6o83MT9mumrWZt92WA1OibPEZaVt4&s=10",
+                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdlMf7QBSv4bHI93O5vq8XuIqYxa9ntjpiUJWbFYnz603y1O90cfiYQtY&s=10",
+                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlMtBsEpWJM2bepnEjdEvDQVpuga42hkUkgP0VxCP9xx2AUfLjeQupcAs&s=10"
+                  ];
   const label = typeLabels[establishment.type];
 
   return (
@@ -106,7 +111,7 @@ export default function MapEstablishmentCard({
           {menuImages.map((image, index) => (
             <Image
               key={`${establishment.id}-${index}`}
-              source={image}
+              source={{uri: image}}
               resizeMode="cover"
               style={styles.menuImage}
             />

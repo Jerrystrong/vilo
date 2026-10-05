@@ -107,7 +107,7 @@ export default function EstablishmentMarker({ establishment, heading }: Props) {
       />
       <TouchableOpacity onPress={() => router.push({
         pathname: "/screens/[etab]",
-        params: { id: establishment.id },
+        params: { etab: establishment.id },
       })} className=" absolute bottom-0 -right-1 items-center justify-center bg-black rounded-full w-[18px] h-[18px]">
         {establishment.type === "restaurant" && (
           <RestaurantIcon fill="#ffffff" width={12} height={12} />
