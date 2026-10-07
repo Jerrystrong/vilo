@@ -10,7 +10,7 @@ import { establishments } from "@/data/establishments";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { cssInterop } from "nativewind";
-import { useEffect } from "react"; 
+import { useEffect } from "react";
 import {
   Dimensions,
   Image,
@@ -93,7 +93,7 @@ export default function HomeScreen() {
           enableTilt
         />
         <TouchableOpacity
-          onPress={() => router.push("/map")}
+          onPress={() => router.push("/screens/map")}
           className="absolute bottom-[12%] right-2"
         >
           <View className="bg-[#9CA3AF] rounded-full px-3 py-3 flex-row items-center">

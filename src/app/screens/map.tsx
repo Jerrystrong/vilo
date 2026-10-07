@@ -5,9 +5,9 @@ import MapEstablishmentCard from "@/components/map-establishment-card";
 import BuildingIcon, { FireIcon } from "@/components/tab-icons";
 import { establishments } from "@/data/establishments";
 import Feather from "@expo/vector-icons/Feather";
-import { BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { router } from "expo-router";
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -17,14 +17,17 @@ import {
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+type FilterType = "tous" | "restaurant" | "bar" | "hotel";
+
 export default function MapScreen() {
   const colorScheme = useColorScheme();
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ["25%", "75%"], []);
+  const snapPoints = useMemo(() => ["25%", "85%"], []);
+  const [selectedFilter, setSelectedFilter] = useState<FilterType>("tous");
 
-  useEffect(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
+  const filteredEstablishments = useMemo(() => {
+    if (selectedFilter === "tous") return establishments;
+    return establishments.filter((e) => e.type === selectedFilter);
+  }, [selectedFilter]);
   return (
     <View style={styles.container}>
       <EstablishmentsMap establishments={establishments} />
@@ -50,7 +53,7 @@ export default function MapScreen() {
           </View>
           <View>
             <TouchableOpacity
-              onPress={() => bottomSheetModalRef.current?.present()}
+              onPress={() => {}}
               className="bg-whiteBg dark:blackBg p-2 rounded-full flex items-center justify-center"
               style={{
                 boxShadow: `0px 4px 4px ${colorScheme === "dark" ? "#25272D" : "#D1D5DB"}`,
@@ -62,10 +65,9 @@ export default function MapScreen() {
           </View>
         </View>
       </SafeAreaView>
-      <BottomSheetModal
-        ref={bottomSheetModalRef}
+      <BottomSheet
         snapPoints={snapPoints}
-        enableDynamicSizing={false}
+        enablePanDownToClose={false}
         backgroundStyle={{
           backgroundColor: colorScheme === "dark" ? "#121818" : "#FFFFFF",
         }}
@@ -82,54 +84,122 @@ export default function MapScreen() {
             height: 42,
           }}
         >
+          {/* Tous */}
           <TouchableOpacity
-            onPress={() => {}}
-            className="bg-primary_color rounded-full px-5 py-2 w-fit h-[36px] justify-center"
+            onPress={() => setSelectedFilter("tous")}
+            className={`rounded-full px-5 py-2 w-fit h-[36px] justify-center transition duration-300 ${
+              selectedFilter === "tous"
+                ? "bg-primary_color"
+                : "bg-[#E5E7EB] dark:bg-[#7F8288]"
+            }`}
           >
-            <Text className="font-bold text-[16px] text-whiteBg">Tous</Text>
+            <Text
+              className={`font-bold text-[16px] ${
+                selectedFilter === "tous"
+                  ? "text-whiteBg"
+                  : "text-[rgba(17,24,39)] opacity-70 dark:text-[#F3F4F6]"
+              }`}
+            >
+              Tous
+            </Text>
           </TouchableOpacity>
+
+          {/* Restaurant */}
           <TouchableOpacity
-            onPress={() => {}}
-            className="bg-[#E5E7EB] dark:bg-[#7F8288] rounded-full px-3 py-2 w-fit h-[36px] flex flex-row items-center gap-2"
+            onPress={() => setSelectedFilter("restaurant")}
+            className={`rounded-full px-3 py-2 w-fit h-[36px] flex flex-row items-center transition duration-300 gap-2 ${
+              selectedFilter === "restaurant"
+                ? "bg-primary_color"
+                : "bg-[#E5E7EB] dark:bg-[#7F8288]"
+            }`}
           >
             <RestaurantIcon
-              fill={colorScheme === "dark" ? "#F3F4F6" : "rgba(17, 24, 39)"}
+              fill={
+                selectedFilter === "restaurant"
+                  ? "#FFFFFF"
+                  : colorScheme === "dark"
+                    ? "#F3F4F6"
+                    : "rgba(17, 24, 39)"
+              }
               width={16}
               height={16}
             />
-            <Text className="text-[16px] text-[rgba(17, 24, 39)] opacity-70  dark:text-[#F3F4F6]">
+            <Text
+              className={`text-[16px] ${
+                selectedFilter === "restaurant"
+                  ? "text-whiteBg font-bold"
+                  : "text-[rgba(17,24,39)] opacity-70 dark:text-[#F3F4F6]"
+              }`}
+            >
               Restaurant
             </Text>
           </TouchableOpacity>
+
+          {/* Bar */}
           <TouchableOpacity
-            onPress={() => {}}
-            className="bg-[#E5E7EB] dark:bg-[#7F8288] rounded-full px-3 py-2 w-fit h-[36px] flex flex-row items-center gap-2"
+            onPress={() => setSelectedFilter("bar")}
+            className={`rounded-full px-3 py-2 w-fit h-[36px] flex transition duration-300 flex-row items-center gap-2 ${
+              selectedFilter === "bar"
+                ? "bg-primary_color"
+                : "bg-[#E5E7EB] dark:bg-[#7F8288]"
+            }`}
           >
             <BarIcon
-              fill={colorScheme === "dark" ? "#F3F4F6" : "rgba(17, 24, 39)"}
+              fill={
+                selectedFilter === "bar"
+                  ? "#FFFFFF"
+                  : colorScheme === "dark"
+                    ? "#F3F4F6"
+                    : "rgba(17, 24, 39)"
+              }
               width={16}
               height={16}
             />
-            <Text className="text-[16px] text-[rgba(17, 24, 39)] opacity-70  dark:text-[#F3F4F6]">
+            <Text
+              className={`text-[16px] ${
+                selectedFilter === "bar"
+                  ? "text-whiteBg font-bold"
+                  : "text-[rgba(17,24,39)] opacity-70 dark:text-[#F3F4F6]"
+              }`}
+            >
               Bar
             </Text>
           </TouchableOpacity>
+
+          {/* Hôtel */}
           <TouchableOpacity
-            onPress={() => {}}
-            className="bg-[#E5E7EB] dark:bg-[#7F8288] rounded-full px-3 py-2 w-fit h-[36px] flex flex-row items-center gap-2"
+            onPress={() => setSelectedFilter("hotel")}
+            className={`rounded-full px-3 py-2 w-fit h-[36px] flex flex-row transition duration-300 items-center gap-2 ${
+              selectedFilter === "hotel"
+                ? "bg-primary_color"
+                : "bg-[#E5E7EB] dark:bg-[#7F8288]"
+            }`}
           >
             <BuildingIcon
-              fill={colorScheme === "dark" ? "#F3F4F6" : "rgba(17, 24, 39)"}
+              fill={
+                selectedFilter === "hotel"
+                  ? "#FFFFFF"
+                  : colorScheme === "dark"
+                    ? "#F3F4F6"
+                    : "rgba(17, 24, 39)"
+              }
               width={16}
               height={16}
             />
-            <Text className="text-[16px] text-[rgba(17, 24, 39)] opacity-70 dark:text-[#F3F4F6]">
+            <Text
+              className={`text-[16px] ${
+                selectedFilter === "hotel"
+                  ? "text-whiteBg font-bold"
+                  : "text-[rgba(17,24,39)] opacity-70 dark:text-[#F3F4F6]"
+              }`}
+            >
               Hôtel
             </Text>
           </TouchableOpacity>
         </ScrollView>
+        {filteredEstablishments.length > 0 ? (  
         <BottomSheetFlatList
-          data={establishments}
+          data={filteredEstablishments}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.sheetList}
           renderItem={({ item }) => (
@@ -137,7 +207,12 @@ export default function MapScreen() {
           )}
           ItemSeparatorComponent={() => <View style={styles.listSeparator} />}
         />
-      </BottomSheetModal>
+        ) : (
+          <View>
+            <Text className="dark:text-whiteBg text-darkBg">Aucun etablissement trouvé</Text>
+          </View>
+        )}
+      </BottomSheet>
     </View>
   );
 }
@@ -202,8 +277,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   sheetList: {
-    padding: 24,
-    paddingTop: 18,
+    padding: 18,
   },
   listSeparator: {
     height: 12,

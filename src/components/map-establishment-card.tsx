@@ -2,8 +2,10 @@ import BarIcon from "@/assets/svg/barIcon";
 import RestaurantIcon from "@/assets/svg/restaurantIcon";
 import { MapEstablishment } from "@/data/establishments";
 import Feather from "@expo/vector-icons/Feather";
+import { router } from "expo-router";
 import {
   Image,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -27,16 +29,18 @@ export default function MapEstablishmentCard({
 }: MapEstablishmentCardProps) {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
-  const menuImages = /* establishment.menu?.length
+  const menuImages =
+    /* establishment.menu?.length
     ? establishment.menu
     : establishment.image
       ? [establishment.image]
       : []; */
-    ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1_O8epLfXAOwRMBVY0tIZei1ZULSSFDCWERM99zyq3TvBCvSDU2RVHEs&s=10",
-                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI0XFuhLuifOhj_h01FQapSn1Jrd6o83MT9mumrWZt92WA1OibPEZaVt4&s=10",
-                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdlMf7QBSv4bHI93O5vq8XuIqYxa9ntjpiUJWbFYnz603y1O90cfiYQtY&s=10",
-                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlMtBsEpWJM2bepnEjdEvDQVpuga42hkUkgP0VxCP9xx2AUfLjeQupcAs&s=10"
-                  ];
+    [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1_O8epLfXAOwRMBVY0tIZei1ZULSSFDCWERM99zyq3TvBCvSDU2RVHEs&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI0XFuhLuifOhj_h01FQapSn1Jrd6o83MT9mumrWZt92WA1OibPEZaVt4&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdlMf7QBSv4bHI93O5vq8XuIqYxa9ntjpiUJWbFYnz603y1O90cfiYQtY&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlMtBsEpWJM2bepnEjdEvDQVpuga42hkUkgP0VxCP9xx2AUfLjeQupcAs&s=10",
+    ];
   const label = typeLabels[establishment.type];
 
   return (
@@ -44,74 +48,83 @@ export default function MapEstablishmentCard({
       style={styles.card}
       className="border-b-2 dark:border-[#1E2928] border-[#E5E7EB]"
     >
-      <View style={styles.heading}>
-        {establishment.image ? (
-          <Image
-            source={establishment.image}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-        ) : null}
-        <View style={styles.headingContent}>
-          {/* etablishment name and type */}
-          <View style={styles.nameRow}>
-            <Text
-              numberOfLines={1}
-              style={[styles.name, { color: isDark ? "#F4F7F6" : "#25292B" }]}
-            >
-              {establishment.name}
-            </Text>
-            <View
-              style={[
-                styles.typeBadge,
-                {
-                  backgroundColor:
-                    establishment.type === "bar" ? "#5D3A9B" : "#D94A00",
-                },
-              ]}
-            >
-              {establishment.type === "restaurant" ? (
-                <RestaurantIcon fill="#FFFFFF" width={16} height={16} />
-              ) : (
-                <BarIcon fill="#FFFFFF" width={16} height={16} />
-              )}
-              <Text style={styles.typeLabel}>{label}</Text>
+      <Pressable
+        onPress={() =>
+          router.push({
+            pathname: "/screens/[etab]",
+            params: { etab: establishment.id },
+          })
+        }
+      >
+        <View style={styles.heading}>
+          {establishment.image ? (
+            <Image
+              source={establishment.image}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          ) : null}
+          <View style={styles.headingContent}>
+            {/* etablishment name and type */}
+            <View style={styles.nameRow}>
+              <Text
+                numberOfLines={1}
+                style={[styles.name, { color: isDark ? "#F4F7F6" : "#25292B" }]}
+              >
+                {establishment.name}
+              </Text>
+              <View
+                style={[
+                  styles.typeBadge,
+                  {
+                    backgroundColor:
+                      establishment.type === "bar" ? "#5D3A9B" : "#D94A00",
+                  },
+                ]}
+              >
+                {establishment.type === "restaurant" ? (
+                  <RestaurantIcon fill="#FFFFFF" width={16} height={16} />
+                ) : (
+                  <BarIcon fill="#FFFFFF" width={16} height={16} />
+                )}
+                <Text style={styles.typeLabel}>{label}</Text>
+              </View>
+            </View>
+            <View style={styles.locationRow}>
+              <Feather
+                name="map-pin"
+                size={16}
+                color={isDark ? "#C4CFCE" : "#6A7173"}
+              />
+              <Text
+                numberOfLines={1}
+                style={[
+                  styles.location,
+                  { color: isDark ? "#D7E0DF" : "#60686A" },
+                ]}
+              >
+                {establishment.location ?? "Kinshasa"}
+              </Text>
             </View>
           </View>
-          <View style={styles.locationRow}>
-            <Feather
-              name="map-pin"
-              size={16}
-              color={isDark ? "#C4CFCE" : "#6A7173"}
-            />
-            <Text
-              numberOfLines={1}
-              style={[
-                styles.location,
-                { color: isDark ? "#D7E0DF" : "#60686A" },
-              ]}
-            >
-              {establishment.location ?? "Kinshasa"}
-            </Text>
-          </View>
         </View>
-      </View>
+      </Pressable>
 
       <Text
         style={[styles.menuTitle, { color: isDark ? "#E7EEEE" : "#535A5C" }]}
       >
         MENU
       </Text>
-      {menuImages.length > 0 ? (
+      {establishment.menu && establishment.menu.length > 0 ? (
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.menuList}
         >
-          {menuImages.map((image, index) => (
+          {establishment.menu.map((image, index) => (
             <Image
               key={`${establishment.id}-${index}`}
-              source={{uri: image}}
+              source={{ uri: image }}
               resizeMode="cover"
               style={styles.menuImage}
             />
