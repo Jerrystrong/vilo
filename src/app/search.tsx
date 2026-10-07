@@ -507,10 +507,6 @@ export default function SearchScreen() {
             backgroundColor: isDark ? "#1E2626" : "#ffffff",
             borderWidth: 1,
             borderColor: isDark ? "#2E3737" : "#E5E7EB",
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 6 },
-            shadowOpacity: isDark ? 0.4 : 0.12,
-            shadowRadius: 16,
             elevation: 8,
             padding: 14,
             zIndex: 100,
@@ -528,7 +524,14 @@ export default function SearchScreen() {
           >
             FILTRER PAR CATÉGORIE
           </Text>
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              gap: 8,
+              marginTop: 14,
+            }}
+          >
             {FILTER_OPTIONS.map((option) => {
               const isActive = activeFilter === option.label;
               return (
@@ -548,12 +551,6 @@ export default function SearchScreen() {
                       : isDark
                         ? "#2C3333"
                         : "#F3F4F6",
-                    borderWidth: 1.5,
-                    borderColor: isActive
-                      ? "#3B82F6"
-                      : isDark
-                        ? "#3A3F3F"
-                        : "#E5E7EB",
                   }}
                 >
                   {/* <Text style={{ fontSize: 14 }}>{option.icon}</Text> */}
