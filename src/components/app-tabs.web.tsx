@@ -21,7 +21,7 @@ import {
 } from './tab-icons';
 import { UserRole, useUserRole } from '@/context/role-context';
 
-export type UserTabKey = 'flame' | 'search' | 'map' | 'favorites' | 'profile';
+export type UserTabKey = 'flame' | 'explore' | 'map' | 'favorites' | 'profile';
 export type EtabTabKey = 'stats' | 'calendar' | 'create' | 'favorites' | 'profile';
 export type TabKey = UserTabKey | EtabTabKey;
 
@@ -99,12 +99,12 @@ export default function AppTabs({
 
             {/* 2. Search */}
             <TabItem
-              isActive={activeTab === 'search'}
-              onPress={() => handleTabPress('search')}
+              isActive={activeTab === 'explore'}
+              onPress={() => handleTabPress('explore')}
             >
               <SearchIcon
                 size={23}
-                color={activeTab === 'search' ? '#FFFFFF' : '#D0D7D7'}
+                color={activeTab === 'explore' ? '#FFFFFF' : '#D0D7D7'}
               />
             </TabItem>
 

@@ -26,7 +26,7 @@ import { useTheme } from "@/hooks/use-theme";
 
 export type UserTabKey =
   | "flame"
-  | "search"
+  | "explore"
   | "map"
   | "favorites"
   | "profile";
@@ -398,16 +398,16 @@ const theme = useTheme()
 
             {/* 2. Search */}
             <TabItem
-              tabKey="search"
-              isActive={activeTab === "search"}
-              onPress={() => handleTabPress("search")}
+              tabKey="explore"
+              isActive={activeTab === "explore"}
+              onPress={() => handleTabPress("explore")}
               registerIndicatorRef={registerIndicatorRef}
               onIndicatorLayout={measureIndicator}
             >
               <SearchIcon
                 size={23}
                 color={
-                  activeTab === "search"
+                  activeTab === "explore"
                     ? "#FFFFFF"
                     : "#D0D7D7"
                 }
