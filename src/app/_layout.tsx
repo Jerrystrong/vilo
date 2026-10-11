@@ -1,11 +1,10 @@
 import "../global.css";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AnimatedSplashOverlay } from "@/components/animated-icon";
 import AppTabs from "@/components/app-tabs";
 import { RoleProvider, useUserRole } from "@/context/role-context";
 import { TabProvider, useActiveTab } from "@/context/tab-context";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useFonts } from "expo-font";
 import {
   DarkTheme,
@@ -19,6 +18,7 @@ import {
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -37,6 +37,7 @@ function PersistentTabs() {
     // La page sera disponible dès que src/app/explore.tsx sera ajoutée.
     explore: "/explore" as Href,
     map: "/",
+    search: "/search",
     favorites: "/message",
     profile: "/user",
   };
@@ -90,8 +91,8 @@ function AppLayout() {
   const [loaded, error] = useFonts({
     "open-sans": require("../../assets/fonts/OpenSans_Condensed-Regular.ttf"),
     "open-sans-bold": require("../../assets/fonts/OpenSans_Condensed-Bold.ttf"),
-    "inter": require("../../assets/fonts/Inter_28pt-Regular.ttf"),
-    "inter-bold": require("../../assets/fonts/Inter_24pt-Bold.ttf")
+    inter: require("../../assets/fonts/Inter_28pt-Regular.ttf"),
+    "inter-bold": require("../../assets/fonts/Inter_24pt-Bold.ttf"),
   });
 
   useEffect(() => {
@@ -117,9 +118,7 @@ function AppLayout() {
       <PersistentTabs />
 
       {showAnimatedSplash && (
-        <AnimatedSplashOverlay
-          onFinish={() => setShowAnimatedSplash(false)}
-        />
+        <AnimatedSplashOverlay onFinish={() => setShowAnimatedSplash(false)} />
       )}
     </ThemeProvider>
   );

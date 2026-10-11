@@ -1,12 +1,11 @@
 import { RadarEstablishment } from "@/components/radar/radar.types";
-import { ImageSourcePropType } from "react-native";
 
 export type MapEstablishment = RadarEstablishment & {
   coordinates: {
     latitude: number;
     longitude: number;
   };
-  menu?: ImageSourcePropType[];
+  menu?: string[];
 };
 
 export const establishments: MapEstablishment[] = [
@@ -18,9 +17,10 @@ export const establishments: MapEstablishment[] = [
     angle: 320,
     size: 34,
     image: require("@/assets/images/bigbite.png"),
-    menu: [
-      require("@/assets/images/bigbite.png"),
-      require("@/assets/images/bbmal.png"),
+    menu: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1_O8epLfXAOwRMBVY0tIZei1ZULSSFDCWERM99zyq3TvBCvSDU2RVHEs&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI0XFuhLuifOhj_h01FQapSn1Jrd6o83MT9mumrWZt92WA1OibPEZaVt4&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdlMf7QBSv4bHI93O5vq8XuIqYxa9ntjpiUJWbFYnz603y1O90cfiYQtY&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlMtBsEpWJM2bepnEjdEvDQVpuga42hkUkgP0VxCP9xx2AUfLjeQupcAs&s=10"
     ],
     location: "Gombe",
     coordinates: { latitude: -4.3158, longitude: 15.2985 },
@@ -33,9 +33,10 @@ export const establishments: MapEstablishment[] = [
     angle: 40,
     size: 34,
     image: require("@/assets/images/bbmal.png"),
-    menu: [
-      require("@/assets/images/bbmal.png"),
-      require("@/assets/images/bigbite.png"),
+    menu: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1_O8epLfXAOwRMBVY0tIZei1ZULSSFDCWERM99zyq3TvBCvSDU2RVHEs&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI0XFuhLuifOhj_h01FQapSn1Jrd6o83MT9mumrWZt92WA1OibPEZaVt4&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdlMf7QBSv4bHI93O5vq8XuIqYxa9ntjpiUJWbFYnz603y1O90cfiYQtY&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlMtBsEpWJM2bepnEjdEvDQVpuga42hkUkgP0VxCP9xx2AUfLjeQupcAs&s=10"
     ],
     location: "Kinshasa",
     coordinates: { latitude: -4.3215, longitude: 15.3112 },
@@ -48,7 +49,11 @@ export const establishments: MapEstablishment[] = [
     angle: 145,
     size: 34,
     image: require("@/assets/images/leclub.png"),
-    menu: [require("@/assets/images/leclub.png")],
+    menu: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1_O8epLfXAOwRMBVY0tIZei1ZULSSFDCWERM99zyq3TvBCvSDU2RVHEs&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI0XFuhLuifOhj_h01FQapSn1Jrd6o83MT9mumrWZt92WA1OibPEZaVt4&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdlMf7QBSv4bHI93O5vq8XuIqYxa9ntjpiUJWbFYnz603y1O90cfiYQtY&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlMtBsEpWJM2bepnEjdEvDQVpuga42hkUkgP0VxCP9xx2AUfLjeQupcAs&s=10"
+    ],
     location: "Lemba",
     coordinates: { latitude: -4.3269, longitude: 15.3056 },
   },
@@ -62,6 +67,8 @@ export const establishments: MapEstablishment[] = [
     image: require("@/assets/images/bigbite.png"),
     location: "Matonge",
     coordinates: { latitude: -4.3165, longitude: 15.3077 },
+    menu: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1_O8epLfXAOwRMBVY0tIZei1ZULSSFDCWERM99zyq3TvBCvSDU2RVHEs&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI0XFuhLuifOhj_h01FQapSn1Jrd6o83MT9mumrWZt92WA1OibPEZaVt4&s=10"],
   },
   {
     id: "6",
@@ -73,5 +80,10 @@ export const establishments: MapEstablishment[] = [
     image: require("@/assets/images/bbmal.png"),
     location: "Gombe",
     coordinates: { latitude: -4.3109, longitude: 15.3021 },
+    menu: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1_O8epLfXAOwRMBVY0tIZei1ZULSSFDCWERM99zyq3TvBCvSDU2RVHEs&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI0XFuhLuifOhj_h01FQapSn1Jrd6o83MT9mumrWZt92WA1OibPEZaVt4&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdlMf7QBSv4bHI93O5vq8XuIqYxa9ntjpiUJWbFYnz603y1O90cfiYQtY&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlMtBsEpWJM2bepnEjdEvDQVpuga42hkUkgP0VxCP9xx2AUfLjeQupcAs&s=10"
+    ],
   },
 ];

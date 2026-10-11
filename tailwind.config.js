@@ -14,6 +14,7 @@ module.exports = {
         hotLight: "#F8F6F3",
         seconday: "#CC4500",
         icon_tint: "#4B5563",
+        bg_dark: "#2C3333"
       },
       fontFamily: {
         "open-sans": "open-sans",
