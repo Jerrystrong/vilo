@@ -14,6 +14,7 @@ import {
   Alert,
   Animated,
   Image,
+  StyleSheet,
   ImageSourcePropType,
   Keyboard,
   Pressable,
@@ -26,17 +27,12 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-<<<<<<< HEAD
-import { ThemedView } from "@/components/themed-view";
-import TopBar from "@/components/topbar/topbar";
+ import TopBar from "@/components/topbar/topbar";
 
 /* ─── Types ──────────────────────────────────────────────── */
 
-interface SiteItem {
-  id: string;
-=======
 interface SitesType {
->>>>>>> 1e8d45adb335f975a24ec9b950768db515f3ff85
+  id: string;
   name: string;
   location: string;
   type: string;
@@ -71,6 +67,17 @@ export default function ExploreScreen() {
   const insets = useSafeAreaInsets();
   const isDark = colorScheme === "dark";
 
+  const colors = {
+    bg: isDark ? "#121818" : "#F4F7F6",
+    card: isDark ? "#1A2020" : "#FFFFFF",
+    separator: isDark ? "#1E2828" : "#EFEFEF",
+    text: isDark ? "#F4F7F6" : "#121818",
+    textSecondary: isDark ? "#8A9494" : "#6B7575",
+    textMuted: isDark ? "#6B7575" : "#9BA5A5",
+    primaryTeal: "#007B7B",
+    badgeBg: "#007B7B",
+  };
+
   const [filterTerm, setFilterTerm] = useState<string>("");
   const [isFocused, setIsFocused] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -90,18 +97,21 @@ export default function ExploreScreen() {
 
   const sites: SitesType[] = [
     {
+      id: "1",
       name: "Centre culturel de Kinshasa",
       location: "Gombe, Kinshasa",
       type: "Culture",
       logo: require("@/assets/images/ccapac.png"),
     },
     {
+      id: "2",
       name: "Parc de la Vallée de la N'sele",
       location: "N'sele",
       type: "Nature & Eco",
       logo: require("@/assets/images/parcnsele.png"),
     },
     {
+      id: "3",
       name: "Musée National de la RDC",
       location: "Lingwala",
       type: "Histoire",
@@ -268,7 +278,6 @@ export default function ExploreScreen() {
     );
 
   return (
-<<<<<<< HEAD
     <ThemedView style={[styles.container, { backgroundColor: colors.bg }]}>
       {/* ── Header ── */}
       <TopBar 
@@ -277,29 +286,6 @@ export default function ExploreScreen() {
                   iconName="more-vertical"
                   iconSize={22} 
                   /> 
-=======
-    <ThemedView className="flex-1 bg-whiteBg dark:bg-blackBg">
-      {/* ── Top Header ── */}
-      <View
-        style={{ paddingTop: Math.max(insets.top, 32) }}
-        className="px-2 pb-3 flex-row justify-between items-center"
-      >
-        <Text className="text-2xl font-bold dark:text-whiteBg text-blackBg px-3 tracking-tight">
-          Découvrir
-        </Text>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={handleMorePress}
-          className="w-10 h-10 items-center justify-center rounded-full"
-        >
-          <Feather
-            name="more-vertical"
-            size={22}
-            color={isDark ? "#F4F7F6" : "#121818"}
-          />
-        </TouchableOpacity>
-      </View>
->>>>>>> 1e8d45adb335f975a24ec9b950768db515f3ff85
 
       {/* ── Search + Filter row ── */}
       <View
@@ -845,7 +831,6 @@ export default function ExploreScreen() {
       </View>
     </ThemedView>
   );
-<<<<<<< HEAD
 }
 
 /* ─── Styles ─────────────────────────────────────────────── */
@@ -1059,6 +1044,3 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
-=======
-}
->>>>>>> 1e8d45adb335f975a24ec9b950768db515f3ff85
