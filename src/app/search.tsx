@@ -1,9 +1,13 @@
+import BarIcon from "@/assets/svg/barIcon";
 import { FilterIcon } from "@/assets/svg/filterIcon";
+import LocationIcon from "@/assets/svg/locationIcon";
+import RestaurantIcon from "@/assets/svg/restaurantIcon";
 import FeedPostCard, { FeedPostItem } from "@/components/feed-post-card";
 import { ThemedView } from "@/components/themed-view";
 import TopBar from "@/components/topbar/topbar";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
@@ -45,12 +49,12 @@ const ALL_SUGGESTIONS = [
 ];
 
 const FILTER_OPTIONS = [
-  { label: "Restaurant", icon: "🍽️" },
-  { label: "Bar", icon: "🍹" },
-  { label: "Hôtel", icon: "🏨" },
-  { label: "Parc", icon: "🌿" },
-  { label: "Culture", icon: "🎭" },
-  { label: "Autre", icon: "📍" },
+  { label: "Restaurant", icon: "resto" },
+  { label: "Bar", icon: "bar" },
+  { label: "Hôtel", icon: "hotel" },
+  { label: "Parc", icon: "parc" },
+  { label: "Culture", icon: "culture" },
+  { label: "Autre", icon: "other" },
 ];
 
 export default function SearchScreen() {
@@ -67,7 +71,8 @@ export default function SearchScreen() {
     "Resto",
     "Bar",
     "Parcs",
-    "Hôtel",
+    "Hotel",
+    "Culture",
   ]);
 
   const suggestionsAnim = useRef(new Animated.Value(0)).current;
@@ -283,8 +288,8 @@ export default function SearchScreen() {
             borderWidth: 1.5,
             borderColor: isFocused
               ? isDark
-                ? "#5DADE2"
-                : "#3B82F6"
+                ? "#A8C0C0"
+                : "#A8C0C0"
               : isDark
                 ? "#3A3F3F"
                 : "#E5E7EB",
@@ -300,8 +305,8 @@ export default function SearchScreen() {
             color={
               isFocused
                 ? isDark
-                  ? "#5DADE2"
-                  : "#3B82F6"
+                  ? "#A8C0C0"
+                  : "#A8C0C0"
                 : isDark
                   ? "#8A9BA8"
                   : "#9CA3AF"
@@ -356,13 +361,13 @@ export default function SearchScreen() {
             alignItems: "center",
             justifyContent: "center",
             backgroundColor: showFilterPopup
-              ? "#3B82F6"
+              ? "#007B7B"
               : isDark
                 ? "#2C3333"
                 : "#ffffff",
             borderWidth: 1.5,
             borderColor: showFilterPopup
-              ? "#3B82F6"
+              ? "#007B7B"
               : isDark
                 ? "#3A3F3F"
                 : "#E5E7EB",
@@ -382,24 +387,64 @@ export default function SearchScreen() {
               alignSelf: "flex-start",
               flexDirection: "row",
               alignItems: "center",
-              backgroundColor: isDark ? "#1E3A5F" : "#EFF6FF",
+              backgroundColor: isDark ? "#2C3333" : "#ffffff",
               borderRadius: 999,
               paddingHorizontal: 12,
               paddingVertical: 5,
               gap: 6,
             }}
           >
+            {FILTER_OPTIONS.find((f) => f.label === activeFilter)?.icon ===
+            "resto" ? (
+              <RestaurantIcon
+                fill={isDark ? "#ffffff" : "#2C3333"}
+                width={12}
+                height={12}
+              />
+            ) : FILTER_OPTIONS.find((f) => f.label === activeFilter)?.icon ===
+              "bar" ? (
+              <BarIcon
+                fill={isDark ? "#ffffff" : "#2C3333"}
+                width={12}
+                height={12}
+              />
+            ) : FILTER_OPTIONS.find((f) => f.label === activeFilter)?.icon ===
+              "hotel" ? (
+              <FontAwesome6
+                name="hotel"
+                size={12}
+                color={isDark ? "#ffffff" : "#2C3333"}
+              />
+            ) : FILTER_OPTIONS.find((f) => f.label === activeFilter)?.icon ===
+              "culture" ? (
+              <FontAwesome6
+                name="people-group"
+                size={12}
+                color={isDark ? "#ffffff" : "#2C3333"}
+              />
+            ) : FILTER_OPTIONS.find((f) => f.label === activeFilter)?.icon ===
+              "parc" ? (
+              <MaterialIcons
+                name="park"
+                size={12}
+                color={isDark ? "#ffffff" : "#2C3333"}
+              />
+            ) : FILTER_OPTIONS.find((f) => f.label === activeFilter)?.icon ===
+              "other" ? (
+              <LocationIcon color={isDark ? "#ffffff" : "#2C3333"} size={12} />
+            ) : (
+              FILTER_OPTIONS.find((f) => f.label === activeFilter)?.icon
+            )}
             <Text
-              style={{ color: isDark ? "#93C5FD" : "#2563EB", fontSize: 13 }}
+              style={{ color: isDark ? "#ffffff" : "#2C3333", fontSize: 13 }}
             >
-              {FILTER_OPTIONS.find((f) => f.label === activeFilter)?.icon}{" "}
               {activeFilter}
             </Text>
             <TouchableOpacity onPress={() => setActiveFilter(null)}>
               <Feather
                 name="x"
                 size={13}
-                color={isDark ? "#93C5FD" : "#2563EB"}
+                color={isDark ? "#ffffff" : "#2C3333"}
               />
             </TouchableOpacity>
           </View>
