@@ -1,6 +1,7 @@
 import { FilterIcon } from "@/assets/svg/filterIcon";
 import FeedPostCard, { FeedPostItem } from "@/components/feed-post-card";
 import { ThemedView } from "@/components/themed-view";
+import TopBar from "@/components/topbar/topbar";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import * as Haptics from "expo-haptics";
@@ -255,25 +256,12 @@ export default function SearchScreen() {
   return (
     <ThemedView className="flex-1 bg-whiteBg dark:bg-blackBg">
       {/* ── Top Header ── */}
-      <View
-        style={{ paddingTop: Math.max(insets.top, 32) }}
-        className="px-2 pb-3 flex-row justify-between items-center"
-      >
-        <Text className="text-2xl font-bold dark:text-whiteBg text-blackBg px-3 tracking-tight">
-          Découvrir
-        </Text>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={handleMorePress}
-          className="w-10 h-10 items-center justify-center rounded-full"
-        >
-          <Feather
-            name="more-vertical"
-            size={22}
-            color={isDark ? "#F4F7F6" : "#121818"}
-          />
-        </TouchableOpacity>
-      </View>
+       <TopBar 
+            title={"Découvrir"}
+            handleMorePress={() => handleMorePress()}
+            iconName="more-vertical"
+            iconSize={22} 
+            /> 
 
       {/* ── Search + Filter row ── */}
       <View

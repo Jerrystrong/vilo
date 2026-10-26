@@ -17,6 +17,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Haptics from "expo-haptics";
 
 import { ThemedView } from "@/components/themed-view";
+import TopBar from "@/components/topbar/topbar";
 
 /* ─── Types ──────────────────────────────────────────────── */
 
@@ -164,18 +165,12 @@ export default function ExploreScreen() {
   return (
     <ThemedView style={[styles.container, { backgroundColor: colors.bg }]}>
       {/* ── Header ── */}
-      <View style={[styles.header, { paddingTop: Math.max(insets.top, 32) }]}>
-        <Text style={[styles.headerTitle, { color: colors.text }]}>
-          Découvrir
-        </Text>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={handleMorePress}
-          style={styles.moreButton}
-        >
-          <Feather name="more-vertical" size={22} color={colors.text} />
-        </TouchableOpacity>
-      </View>
+      <TopBar 
+                  title={"Découvrir"}
+                  handleMorePress={() => handleMorePress()}
+                  iconName="more-vertical"
+                  iconSize={22} 
+                  /> 
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -605,7 +600,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   eventOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
   },
   eventCenterLabel: {
     position: "absolute",

@@ -26,6 +26,7 @@ import { FireIcon } from "@/components/tab-icons";
 import Svg, { Circle, Path, Rect } from "react-native-svg";
 import MapView, { Marker } from "react-native-maps";
 import EtabPostCard from "@/components/etab-post-card";
+import TopBarBack from "@/components/topbar/topbarBack";
 
 cssInterop(LinearGradient, { className: "style" }); 
 
@@ -131,27 +132,12 @@ export default function EtabScreen() {
     > 
 
       {/* header of page */}
-      <View className="mt-[50px] mx-4 flex flex-row justify-between items-center">
-       <View className="flex flex-row items-center justify-center ">
-        <TouchableOpacity
-              accessibilityLabel="Retour"
-              onPress={() => router.back()}
-            >
-              <Feather
-                name="chevron-left"
-                size={24}
-                color={colorScheme === "dark" ? "white" : "black"}
-              />
-            </TouchableOpacity>
-        <Text className="text-2xl font-bold dark:text-whiteBg text-blackBg">{etab?.name}</Text>
-       </View>
-        <View className="flex flex-row gap-2 items-center">
-           <DotIcon
-        style={{ width: 20, height: 20 }} width={24} height={24} // Ajusta el tamaño según tu necesidad
-        fill={colorScheme === "dark" ? Colors.light.background : Colors.dark.background} // O el color que desees
-      />
-        </View>
-      </View>
+      <TopBarBack 
+                  title={etab?.name?? 'Retour'}
+                  handleMorePress={() => {}}
+                  iconName="more-vertical"
+                  iconSize={24} 
+                  /> 
       {/* header end */} 
       <View className="flex-1">
         <ScrollView className="px-4" showsVerticalScrollIndicator={false}>

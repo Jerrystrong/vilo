@@ -25,6 +25,7 @@ import { BookmarkIcon, HeartIcon } from "@/components/tab-icons";
 import Svg, { Circle, Path, Rect } from "react-native-svg";
 import MapView, { Marker } from "react-native-maps";
 import EtabPostCard from "@/components/etab-post-card";
+import TopBar from "@/components/topbar/topbar";
 
 cssInterop(LinearGradient, { className: "style" }); 
 
@@ -135,23 +136,12 @@ export default function UserScreen() {
     > 
 
       {/* header of page */}
-      <View className="mt-[50px] mx-4 flex flex-row justify-between items-center">
-       <View className="flex flex-row items-center justify-center ">
-        <TouchableOpacity
-              accessibilityLabel="Retour"
-              onPress={() => router.back()}
-            > 
-            </TouchableOpacity>
-        <Text className="text-2xl font-bold dark:text-whiteBg text-blackBg">Profil</Text>
-       </View>
-        <View className="flex flex-row gap-2 items-center">
-           <SettingsIcon
-             width={24}
-             height={24}
-             color={colorScheme === "dark" ? "#FFFFFF" : "#292D32"}
-           />
-        </View>
-      </View>
+      <TopBar 
+      title={"Profil"}
+      handleMorePress={() => router.push("/")}
+      iconName="settings"
+      iconSize={24} 
+      /> 
       {/* header end */} 
       <View className="flex-1">
         <ScrollView className="px-4" showsVerticalScrollIndicator={false}>
