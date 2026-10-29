@@ -6,6 +6,8 @@ export type MapEstablishment = RadarEstablishment & {
     longitude: number;
   };
   menu?: string[];
+  subType?: string;
+  description?: string;
 };
 
 export const establishments: MapEstablishment[] = [
@@ -79,6 +81,57 @@ export const establishments: MapEstablishment[] = [
     size: 34,
     image: require("@/assets/images/bbmal.png"),
     location: "Gombe",
+    coordinates: { latitude: -4.3109, longitude: 15.3021 },
+    menu: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1_O8epLfXAOwRMBVY0tIZei1ZULSSFDCWERM99zyq3TvBCvSDU2RVHEs&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI0XFuhLuifOhj_h01FQapSn1Jrd6o83MT9mumrWZt92WA1OibPEZaVt4&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdlMf7QBSv4bHI93O5vq8XuIqYxa9ntjpiUJWbFYnz603y1O90cfiYQtY&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlMtBsEpWJM2bepnEjdEvDQVpuga42hkUkgP0VxCP9xx2AUfLjeQupcAs&s=10"
+    ],
+  },
+  {
+    id: "7",
+    type: "site",
+    subType: 'Histoire',
+    name: "Musée National de la RDC",
+    orbit: 3,
+    angle: 90,
+    size: 34,
+    image: require("@/assets/images/musee.png"),
+    location: "Lingwala",
+    coordinates: { latitude: -4.3109, longitude: 15.3021 },
+    menu: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1_O8epLfXAOwRMBVY0tIZei1ZULSSFDCWERM99zyq3TvBCvSDU2RVHEs&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI0XFuhLuifOhj_h01FQapSn1Jrd6o83MT9mumrWZt92WA1OibPEZaVt4&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdlMf7QBSv4bHI93O5vq8XuIqYxa9ntjpiUJWbFYnz603y1O90cfiYQtY&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlMtBsEpWJM2bepnEjdEvDQVpuga42hkUkgP0VxCP9xx2AUfLjeQupcAs&s=10"
+    ],
+  },
+  {
+    id: "8",
+    type: "site",
+    subType: 'Nature & Eco',
+    name: "Parc de la Vallée de la N'sele",
+    orbit: 1,
+    angle: 175,
+    size: 34,
+    image: require("@/assets/images/parcnsele.png"),
+    location: "N'sele",
+    coordinates: { latitude: -4.3109, longitude: 15.3021 },
+    menu: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1_O8epLfXAOwRMBVY0tIZei1ZULSSFDCWERM99zyq3TvBCvSDU2RVHEs&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI0XFuhLuifOhj_h01FQapSn1Jrd6o83MT9mumrWZt92WA1OibPEZaVt4&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdlMf7QBSv4bHI93O5vq8XuIqYxa9ntjpiUJWbFYnz603y1O90cfiYQtY&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlMtBsEpWJM2bepnEjdEvDQVpuga42hkUkgP0VxCP9xx2AUfLjeQupcAs&s=10"
+    ],
+  },
+  {
+    id: "9",
+    type: "site",
+    subType: 'Histoire',
+    name: "Centre culturel de Kinshasa",
+    orbit: 2,
+    angle: 210,
+    size: 34,
+    image: require("@/assets/images/ccapac.png"),
+    location: "Gombe, Kinshasa",
     coordinates: { latitude: -4.3109, longitude: 15.3021 },
     menu: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1_O8epLfXAOwRMBVY0tIZei1ZULSSFDCWERM99zyq3TvBCvSDU2RVHEs&s=10",
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI0XFuhLuifOhj_h01FQapSn1Jrd6o83MT9mumrWZt92WA1OibPEZaVt4&s=10",

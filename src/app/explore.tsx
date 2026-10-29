@@ -4,6 +4,7 @@ import LocationIcon from "@/assets/svg/locationIcon";
 import RestaurantIcon from "@/assets/svg/restaurantIcon";
 import FeedPostCard, { FeedPostItem } from "@/components/feed-post-card";
 import { ThemedView } from "@/components/themed-view";
+import { establishments, MapEstablishment } from "@/data/establishments";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -78,26 +79,9 @@ export default function ExploreScreen() {
   const filterAnim = useRef(new Animated.Value(0)).current;
   const inputRef = useRef<TextInput>(null);
 
-  const sites: SitesType[] = [
-    {
-      name: "Centre culturel de Kinshasa",
-      location: "Gombe, Kinshasa",
-      type: "Culture",
-      logo: require("@/assets/images/ccapac.png"),
-    },
-    {
-      name: "Parc de la Vallée de la N'sele",
-      location: "N'sele",
-      type: "Nature & Eco",
-      logo: require("@/assets/images/parcnsele.png"),
-    },
-    {
-      name: "Musée National de la RDC",
-      location: "Lingwala",
-      type: "Histoire",
-      logo: require("@/assets/images/musee.png"),
-    },
-  ];
+  const sites: MapEstablishment[] = establishments.filter(
+    (item) => item.type === "site",
+  );
 
   const FEED_POSTS: FeedPostItem[] = [
     {
@@ -247,7 +231,7 @@ export default function ExploreScreen() {
     .filter(
       (s) =>
         !activeFilter ||
-        s.type.toLowerCase().includes(activeFilter.toLowerCase()) ||
+        s.subType!.toLowerCase().includes(activeFilter.toLowerCase()) ||
         s.name.toLowerCase().includes(activeFilter.toLowerCase()),
     )
     .filter(
@@ -722,30 +706,39 @@ export default function ExploreScreen() {
             </Text>
             <View className="flex gap-3 my-5">
               {filteredSites.map((site) => (
-                <View
+                <Pressable
                   key={site.name}
-                  className="flex-row items-center rounded-full dark:bg-[#2C3333] border border-[#E5E7EB] dark:border-[#2C3333] bg-[#ffffff] p-3 gap-3"
+                  onPress={() => {
+                    router.push({
+                      pathname: "/screens/[etab]",
+                      params: { etab: site.id },
+                    });
+                  }}
                 >
-                  <Image
-                    source={site.logo}
-                    resizeMode="cover"
-                    style={{ width: 50, height: 50, borderRadius: 50 }}
-                  />
-                  <View>
-                    <Text className="text-[14px] dark:text-whiteBg text-blackBg px-2 font-bold">
-                      {site.name}
-                    </Text>
-                    <View className="flex flex-row items-center mt-2">
-                      <Text className="text-[14px] text-[#9CA3AF] px-2">
-                        {site.location}
+                  <View
+                    className="flex-row items-center rounded-full dark:bg-[#2C3333] border border-[#E5E7EB] dark:border-[#2C3333] bg-[#ffffff] p-3 gap-3"
+                  >
+                    <Image
+                      source={site.image}
+                      resizeMode="cover"
+                      style={{ width: 50, height: 50, borderRadius: 50 }}
+                    />
+                    <View>
+                      <Text className="text-[14px] dark:text-whiteBg text-blackBg px-2 font-bold">
+                        {site.name}
                       </Text>
-                      <View className="w-1 h-1 rounded-full bg-[#9CA3AF]" />
-                      <Text className="text-[14px] text-[#9CA3AF] px-2">
-                        {site.type}
-                      </Text>
+                      <View className="flex flex-row items-center mt-2">
+                        <Text className="text-[14px] text-[#9CA3AF] px-2">
+                          {site.location}
+                        </Text>
+                        <View className="w-1 h-1 rounded-full bg-[#9CA3AF]" />
+                        <Text className="text-[14px] text-[#9CA3AF] px-2">
+                          {site.subType}
+                        </Text>
+                      </View>
                     </View>
                   </View>
-                </View>
+                </Pressable>
               ))}
               {filteredSites.length === 0 && (
                 <View

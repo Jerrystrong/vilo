@@ -1,5 +1,6 @@
 import BarIcon from "@/assets/svg/barIcon";
 import RestaurantIcon from "@/assets/svg/restaurantIcon";
+import SpyglassIcon from "@/assets/svg/spyglass";
 import { MapEstablishment } from "@/data/establishments";
 import Feather from "@expo/vector-icons/Feather";
 import { router } from "expo-router";
@@ -22,6 +23,7 @@ const typeLabels = {
   bar: "Bar",
   hotel: "Hotel",
   tourist: "A visiter",
+  site: "A visiter",
 } as const;
 
 export default function MapEstablishmentCard({
@@ -29,18 +31,6 @@ export default function MapEstablishmentCard({
 }: MapEstablishmentCardProps) {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
-  const menuImages =
-    /* establishment.menu?.length
-    ? establishment.menu
-    : establishment.image
-      ? [establishment.image]
-      : []; */
-    [
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1_O8epLfXAOwRMBVY0tIZei1ZULSSFDCWERM99zyq3TvBCvSDU2RVHEs&s=10",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI0XFuhLuifOhj_h01FQapSn1Jrd6o83MT9mumrWZt92WA1OibPEZaVt4&s=10",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdlMf7QBSv4bHI93O5vq8XuIqYxa9ntjpiUJWbFYnz603y1O90cfiYQtY&s=10",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlMtBsEpWJM2bepnEjdEvDQVpuga42hkUkgP0VxCP9xx2AUfLjeQupcAs&s=10",
-    ];
   const label = typeLabels[establishment.type];
 
   return (
@@ -84,6 +74,8 @@ export default function MapEstablishmentCard({
               >
                 {establishment.type === "restaurant" ? (
                   <RestaurantIcon fill="#FFFFFF" width={16} height={16} />
+                ) : establishment.type === "site" ? (
+                  <SpyglassIcon size={12} color="#ffffff" />
                 ) : (
                   <BarIcon fill="#FFFFFF" width={16} height={16} />
                 )}
@@ -113,7 +105,7 @@ export default function MapEstablishmentCard({
       <Text
         style={[styles.menuTitle, { color: isDark ? "#E7EEEE" : "#535A5C" }]}
       >
-        MENU
+        GALERIE
       </Text>
       {establishment.menu && establishment.menu.length > 0 ? (
         <ScrollView

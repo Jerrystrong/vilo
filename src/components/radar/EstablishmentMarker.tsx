@@ -1,20 +1,21 @@
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity } from "react-native";
 
 import Animated, {
-    SharedValue,
-    useAnimatedStyle,
+  SharedValue,
+  useAnimatedStyle,
 } from "react-native-reanimated";
 
 import { RadarEstablishment } from "./radar.types";
 
 import BarIcon from "@/assets/svg/barIcon";
 import RestaurantIcon from "@/assets/svg/restaurantIcon";
-import {
-    RADAR_CENTER_X,
-    RADAR_CENTER_Y,
-    RADAR_ORBITS,
-} from "./radar.constants";
+import SpyglassIcon from "@/assets/svg/spyglass";
 import { router } from "expo-router";
+import {
+  RADAR_CENTER_X,
+  RADAR_CENTER_Y,
+  RADAR_ORBITS,
+} from "./radar.constants";
 
 const ESTABLISHMENT_ICONS = {
   restaurant: require("@/assets/svg/restaurantIcon"),
@@ -99,21 +100,30 @@ export default function EstablishmentMarker({ establishment, heading }: Props) {
     >
       <Image
         source={establishment.image}
-        resizeMode="contain"
+        resizeMode="cover"
         style={{
           width: size,
           height: size,
+          borderRadius: size,
         }}
       />
-      <TouchableOpacity onPress={() => router.push({
-        pathname: "/screens/[etab]",
-        params: { etab: establishment.id },
-      })} className=" absolute bottom-0 -right-1 items-center justify-center bg-black rounded-full w-[18px] h-[18px]">
+      <TouchableOpacity
+        onPress={() =>
+          router.push({
+            pathname: "/screens/[etab]",
+            params: { etab: establishment.id },
+          })
+        }
+        className=" absolute bottom-0 -right-1 items-center justify-center bg-black rounded-full w-[18px] h-[18px]"
+      >
         {establishment.type === "restaurant" && (
           <RestaurantIcon fill="#ffffff" width={12} height={12} />
         )}
         {establishment.type === "bar" && (
           <BarIcon fill="#ffffff" width={12} height={12} />
+        )}
+        {establishment.type === "site" && (
+          <SpyglassIcon size={12} color="#ffffff" />
         )}
       </TouchableOpacity>
     </Animated.View>

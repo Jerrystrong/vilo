@@ -1,18 +1,25 @@
-import BottomSheet, {
+import {
   BottomSheetFlatList,
   BottomSheetModal,
 } from "@gorhom/bottom-sheet";
-import React, { useCallback, useMemo, useRef } from "react";
-import { Pressable, StyleSheet, Text, useColorScheme, useWindowDimensions, View } from "react-native";
-import { Carousel } from "react-native-reanimated-carousel";
+import { useCallback, useMemo, useRef } from "react";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
   interpolate,
+  useAnimatedStyle,
+  useSharedValue,
   withSpring,
   withTiming,
   type SharedValue,
 } from "react-native-reanimated";
+import { Carousel } from "react-native-reanimated-carousel";
 import HotCard from "./hotCard";
 import PaginationDot from "./PaginationDot";
 import { RadarEstablishment } from "./radar/radar.types";
@@ -37,13 +44,13 @@ function AnimatedCardPage({
       Math.abs(relativeProgress.value),
       [0, 1],
       [1, 0.95],
-      "clamp"
+      "clamp",
     );
     const opacity = interpolate(
       Math.abs(relativeProgress.value),
       [0, 1],
       [1, 0.82],
-      "clamp"
+      "clamp",
     );
 
     return {
@@ -148,9 +155,34 @@ export default function HotEstablishments({
           ]}
         >
           <View style={styles.containerTiret}>
-            <View style = {[styles.tiret, {backgroundColor : colorScheme === "dark" ? "#F4F7F6" : "#121818"}]}></View>
-            <View style = {[styles.tiret, {width : 10, backgroundColor : colorScheme === "dark" ? "#F4F7F6" : "#121818"}]}></View>
-            <View style = {[styles.tiret, {backgroundColor : colorScheme === "dark" ? "#F4F7F6" : "#121818"}]}></View>
+            <View
+              style={[
+                styles.tiret,
+                {
+                  backgroundColor:
+                    colorScheme === "dark" ? "#F4F7F6" : "#121818",
+                },
+              ]}
+            ></View>
+            <View
+              style={[
+                styles.tiret,
+                {
+                  width: 10,
+                  backgroundColor:
+                    colorScheme === "dark" ? "#F4F7F6" : "#121818",
+                },
+              ]}
+            ></View>
+            <View
+              style={[
+                styles.tiret,
+                {
+                  backgroundColor:
+                    colorScheme === "dark" ? "#F4F7F6" : "#121818",
+                },
+              ]}
+            ></View>
           </View>
         </Pressable>
       </View>
@@ -166,11 +198,7 @@ export default function HotEstablishments({
         }}
       >
         {cardPages.map((_, index) => (
-          <PaginationDot
-            key={index}
-            index={index}
-            progress={progress}
-          />
+          <PaginationDot key={index} index={index} progress={progress} />
         ))}
       </View>
 
@@ -182,17 +210,29 @@ export default function HotEstablishments({
           backgroundColor: colorScheme === "dark" ? "#121818" : "#FFFFFF",
           borderTopLeftRadius: 32,
           borderTopRightRadius: 32,
-          borderColor: '#769E9B',
+          borderColor: colorScheme === "dark" ? "#121818" : "#769E9B",
           borderWidth: 2,
           overflow: "hidden",
         }}
-        handleIndicatorStyle={{ backgroundColor: colorScheme === "dark" ? "#769E9B" : "#A8C0C0" }}
+        handleIndicatorStyle={{
+          backgroundColor: colorScheme === "dark" ? "#769E9B" : "#A8C0C0",
+        }}
       >
         <View style={styles.sheetHeader}>
-          <Text style={[styles.sheetTitle, { color: colorScheme === "dark" ? "#F4F7F6" : "#121818" }]}>
+          <Text
+            style={[
+              styles.sheetTitle,
+              { color: colorScheme === "dark" ? "#F4F7F6" : "#121818" },
+            ]}
+          >
             Établissements proches
           </Text>
-          <Text style={[styles.sheetSubtitle, { color: colorScheme === "dark" ? "#B7CCC9" : "#60646C" }]}>
+          <Text
+            style={[
+              styles.sheetSubtitle,
+              { color: colorScheme === "dark" ? "#B7CCC9" : "#60646C" },
+            ]}
+          >
             {establishments.length} adresses à découvrir
           </Text>
         </View>

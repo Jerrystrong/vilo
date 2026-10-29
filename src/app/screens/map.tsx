@@ -197,19 +197,21 @@ export default function MapScreen() {
             </Text>
           </TouchableOpacity>
         </ScrollView>
-        {filteredEstablishments.length > 0 ? (  
-        <BottomSheetFlatList
-          data={filteredEstablishments}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.sheetList}
-          renderItem={({ item }) => (
-            <MapEstablishmentCard establishment={item} />
-          )}
-          ItemSeparatorComponent={() => <View style={styles.listSeparator} />}
-        />
+        {filteredEstablishments.length > 0 ? (
+          <BottomSheetFlatList
+            data={filteredEstablishments}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.sheetList}
+            renderItem={({ item }) => (
+              <MapEstablishmentCard establishment={item} />
+            )}
+            ItemSeparatorComponent={() => <View style={styles.listSeparator} />}
+          />
         ) : (
           <View>
-            <Text className="dark:text-whiteBg text-darkBg">Aucun etablissement trouvé</Text>
+            <Text className="dark:text-whiteBg text-darkBg">
+              Aucun etablissement trouvé
+            </Text>
           </View>
         )}
       </BottomSheet>

@@ -4,6 +4,7 @@ export type EstablishmentType =
   | 'restaurant'
   | 'bar'
   | 'hotel'
+  | 'site'
   | 'tourist';
 
 export type RadarEstablishment = {

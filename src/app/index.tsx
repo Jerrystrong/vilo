@@ -15,6 +15,7 @@ import {
   Dimensions,
   Image,
   Platform,
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -77,11 +78,15 @@ export default function HomeScreen() {
           </View>
         </View>
         <View className="flex flex-row gap-2 items-center">
-          <View className="w-[40px] h-[40px] border border-icon_tint rounded-full items-center justify-center relative">
-            <View className="" style={styles.pulse} />
-            <BellNotificationIcon stroke="#4B5563" width={18} height={18} />
-          </View>
-          <LandscapeIcon width={36} height={36} />
+          <Pressable onPress={() => router.push("/message")}>
+            <View className="w-[40px] h-[40px] border border-icon_tint rounded-full items-center justify-center relative">
+              <View className="" style={styles.pulse} />
+              <BellNotificationIcon stroke="#4B5563" width={18} height={18} />
+            </View>
+          </Pressable>
+          <Pressable onPress={() => router.push("/feed")}>
+            <LandscapeIcon width={36} height={36} />
+          </Pressable>
         </View>
       </View>
       {/* header end */}
@@ -150,5 +155,26 @@ const styles = StyleSheet.create({
     overflow: "visible",
     zIndex: 20,
     position: "relative",
+  },
+  sheetHeader: {
+    paddingHorizontal: 24,
+    paddingTop: 8,
+  },
+  sheetTitle: {
+    fontFamily: "inter-bold",
+    fontSize: 20,
+    lineHeight: 25,
+  },
+  sheetSubtitle: {
+    fontFamily: "inter",
+    fontSize: 14,
+    marginTop: 4,
+  },
+  sheetList: {
+    padding: 24,
+    paddingTop: 18,
+  },
+  listSeparator: {
+    height: 12,
   },
 });

@@ -29,7 +29,7 @@ export default function HotCard({ card, variant = "compact" }: HotCardProps) {
         isDetailed && styles.detailedCard,
         {
           backgroundColor: colorScheme === "dark" ? "#121818" : "#FFFFFF",
-          borderColor: colorScheme === "dark" ? "#3A5E5C" : "#E2E5EA",
+          borderColor: colorScheme === "dark" ? "#3a5e5ce3" : "#E2E5EA",
         },
       ]}
     >
