@@ -14,6 +14,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import BellNotificationIcon from "@/assets/svg/notificationIcon";
+import TopBar from "@/components/topbar/topbar";
 import { ThemedView } from "@/components/themed-view";
 
 interface MessageItem {
@@ -112,18 +113,12 @@ export default function MessageScreen() {
   return (
     <ThemedView style={[styles.container, { backgroundColor: colors.bg }]}>
       {/* ── Header ── */}
-      <View style={[styles.header, { paddingTop: Math.max(insets.top, 32) }]}>
-        <Text style={[styles.headerTitle, { color: colors.text }]}>
-          Activités
-        </Text>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={handleMorePress}
-          style={styles.moreButton}
-        >
-          <Feather name="more-vertical" size={22} color={colors.text} />
-        </TouchableOpacity>
-      </View>
+      <TopBar 
+                  title={"Activités"}
+                  handleMorePress={() => handleMorePress()}
+                  iconName="more-vertical"
+                  iconSize={22} 
+                  /> 
 
       <ScrollView
         showsVerticalScrollIndicator={false}

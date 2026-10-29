@@ -27,7 +27,12 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import TopBar from "@/components/topbar/topbar";
+
+/* ─── Types ──────────────────────────────────────────────── */
+
 interface SitesType {
+  id: string;
   name: string;
   location: string;
   type: string;
@@ -61,6 +66,17 @@ export default function ExploreScreen() {
   const colorScheme = useColorScheme();
   const insets = useSafeAreaInsets();
   const isDark = colorScheme === "dark";
+
+  const colors = {
+    bg: isDark ? "#121818" : "#F4F7F6",
+    card: isDark ? "#1A2020" : "#FFFFFF",
+    separator: isDark ? "#1E2828" : "#EFEFEF",
+    text: isDark ? "#F4F7F6" : "#121818",
+    textSecondary: isDark ? "#8A9494" : "#6B7575",
+    textMuted: isDark ? "#6B7575" : "#9BA5A5",
+    primaryTeal: "#007B7B",
+    badgeBg: "#007B7B",
+  };
 
   const [filterTerm, setFilterTerm] = useState<string>("");
   const [isFocused, setIsFocused] = useState(false);
@@ -242,27 +258,14 @@ export default function ExploreScreen() {
     );
 
   return (
-    <ThemedView className="flex-1 bg-whiteBg dark:bg-blackBg">
-      {/* ── Top Header ── */}
-      <View
-        style={{ paddingTop: Math.max(insets.top, 32) }}
-        className="px-2 pb-3 flex-row justify-between items-center"
-      >
-        <Text className="text-2xl font-bold dark:text-whiteBg text-blackBg px-3 tracking-tight">
-          Découvrir
-        </Text>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={handleMorePress}
-          className="w-10 h-10 items-center justify-center rounded-full"
-        >
-          <Feather
-            name="more-vertical"
-            size={22}
-            color={isDark ? "#F4F7F6" : "#121818"}
-          />
-        </TouchableOpacity>
-      </View>
+    <ThemedView style={[styles.container, { backgroundColor: colors.bg }]}>
+      {/* ── Header ── */}
+      <TopBar
+        title={"Découvrir"}
+        handleMorePress={() => handleMorePress()}
+        iconName="more-vertical"
+        iconSize={22}
+      />
 
       {/* ── Search + Filter row ── */}
       <View
@@ -715,9 +718,7 @@ export default function ExploreScreen() {
                     });
                   }}
                 >
-                  <View
-                    className="flex-row items-center rounded-full dark:bg-[#2C3333] border border-[#E5E7EB] dark:border-[#2C3333] bg-[#ffffff] p-3 gap-3"
-                  >
+                  <View className="flex-row items-center rounded-full dark:bg-[#2C3333] border border-[#E5E7EB] dark:border-[#2C3333] bg-[#ffffff] p-3 gap-3">
                     <Image
                       source={site.image}
                       resizeMode="cover"

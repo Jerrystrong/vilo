@@ -17,6 +17,7 @@ import * as Haptics from "expo-haptics";
 
 import { ThemedView } from "@/components/themed-view";
 import FeedPostCard, { FeedPostItem } from "@/components/feed-post-card";
+import TopBar from "@/components/topbar/topbar";
 
 interface StoryItem {
   id: string;
@@ -158,26 +159,12 @@ export default function FeedScreen() {
   return (
     <ThemedView className="flex-1 bg-[#F9FBFA] dark:bg-[#121818]">
       {/* ── Top Header ── */}
-      <View
-        style={{ paddingTop: Math.max(insets.top, 32) }}
-        className="px-2 pb-3 flex-row justify-between items-center"
-      >
-        <Text className="text-2xl font-bold dark:text-whiteBg text-blackBg px-3 font-bold tracking-tight">
-          Fil
-        </Text>
-
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={handleMorePress}
-          className="w-10 h-10 items-center justify-center rounded-full"
-        >
-          <Feather
-            name="more-vertical"
-            size={22}
-            color={isDark ? "#F4F7F6" : "#121818"}
-          />
-        </TouchableOpacity>
-      </View>
+      <TopBar 
+                  title={"Fil"}
+                  handleMorePress={() => handleMorePress()}
+                  iconName="more-vertical"
+                  iconSize={22} 
+                  /> 
 
       <ScrollView
         showsVerticalScrollIndicator={false}

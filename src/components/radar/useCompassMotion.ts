@@ -3,8 +3,13 @@ import { useEffect } from "react";
 import {
   Easing,
   useSharedValue,
+  withRepeat,
   withTiming,
 } from "react-native-reanimated";
+import { Platform } from "react-native";
+
+/** Durée d'un tour complet pour la rotation automatique Android (en ms). */
+const AUTO_ROTATION_DURATION = 30_000;
 
 function normalizeAngle(angle: number) {
   const result = angle % 360;
@@ -24,19 +29,35 @@ function shortestDelta(current: number, previous: number) {
   return delta;
 }
 
+/**
+ * Sur Android : rotation automatique infinie des établissements (360° en
+ * AUTO_ROTATION_DURATION ms, vitesse constante).
+ * Sur iOS : suit le cap magnétique de la boussole.
+ */
 export function useCompassHeading() {
   const heading = useSharedValue(0);
 
   useEffect(() => {
+    if (Platform.OS === "android") {
+      // Rotation automatique infinie : de 0 à 360° en boucle
+      heading.value = withRepeat(
+        withTiming(360, {
+          duration: AUTO_ROTATION_DURATION,
+          easing: Easing.linear,
+        }),
+        -1, // infini
+        false, // pas de retour arrière
+      );
+      return;
+    }
+
+    // ── iOS : boussole ──────────────────────────────────────────────────────
     let mounted = true;
     let subscription: Location.LocationSubscription | null = null;
     let previousHeading: number | null = null;
     let accumulatedHeading = 0;
 
     const start = async () => {
-      // Android ne démarre pas l'écoute de la boussole sans autorisation de
-      // localisation, même pour le cap magnétique. Sans ceci, l'API échoue
-      // silencieusement et le radar reste immobile.
       const { status } = await Location.requestForegroundPermissionsAsync();
 
       if (!mounted || status !== "granted") {
