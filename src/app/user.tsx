@@ -33,12 +33,6 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Circle, Path, Rect } from "react-native-svg";
-<<<<<<< HEAD
-=======
-import MapView, { Marker } from "react-native-maps";
-import EtabPostCard from "@/components/etab-post-card";
-import TopBar from "@/components/topbar/topbar";
->>>>>>> 1bb734d9e9bda90c2b387d470fbde36de99b5de7
 
 cssInterop(LinearGradient, { className: "style" });
 
@@ -328,7 +322,6 @@ export default function UserScreen() {
     <ThemedView
       className="flex-1 bg-whiteBg dark:bg-blackBg"
       style={styles.container}
-<<<<<<< HEAD
     >
       {/* Header of page */}
       <View className="mt-[50px] mx-4 flex flex-row justify-between items-center">
@@ -368,18 +361,6 @@ export default function UserScreen() {
       </View>
       {/* Header end */}
 
-=======
-    > 
-
-      {/* header of page */}
-      <TopBar 
-      title={"Profil"}
-      handleMorePress={() => router.push("/")}
-      iconName="settings"
-      iconSize={24} 
-      /> 
-      {/* header end */} 
->>>>>>> 1bb734d9e9bda90c2b387d470fbde36de99b5de7
       <View className="flex-1">
         <ScrollView className="px-4" showsVerticalScrollIndicator={false}>
           <View className="flex flex-row mt-[20px] items-center gap-4">

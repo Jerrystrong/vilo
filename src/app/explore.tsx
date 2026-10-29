@@ -19,6 +19,7 @@ import {
   Keyboard,
   Pressable,
   ScrollView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -819,3 +820,215 @@ export default function ExploreScreen() {
     </ThemedView>
   );
 }
+
+/* ─── Styles ─────────────────────────────────────────────── */
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+
+  /* Header */
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingBottom: 10,
+  },
+  headerTitle: {
+    fontSize: 26,
+    fontWeight: "700",
+    letterSpacing: -0.5,
+  },
+  moreButton: {
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 20,
+  },
+
+  /* Search */
+  searchRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    gap: 10,
+    marginBottom: 14,
+  },
+  searchContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 24,
+    borderWidth: 1,
+    paddingHorizontal: 14,
+    height: 44,
+    gap: 8,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 14,
+    height: 44,
+  },
+  filterIconBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    borderWidth: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  /* Chips */
+  chipsRow: {
+    paddingHorizontal: 20,
+    gap: 8,
+    marginBottom: 4,
+  },
+  chip: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderRadius: 20,
+  },
+  chipLabel: {
+    fontSize: 13,
+    fontWeight: "500",
+  },
+  chipX: {
+    fontSize: 14,
+    fontWeight: "600",
+    lineHeight: 16,
+  },
+
+  /* Section label */
+  sectionLabel: {
+    fontSize: 11,
+    fontWeight: "700",
+    letterSpacing: 1.2,
+    marginHorizontal: 20,
+    marginTop: 18,
+    marginBottom: 10,
+  },
+
+  /* Sites list */
+  sitesList: {
+    paddingHorizontal: 20,
+  },
+  siteRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 14,
+    borderWidth: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+  },
+  siteAvatarWrapper: {
+    width: 46,
+    height: 46,
+    borderRadius: 10,
+    overflow: "hidden",
+    backgroundColor: "#E0E8E8",
+  },
+  siteAvatar: {
+    width: "100%",
+    height: "100%",
+  },
+  siteInfo: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  siteName: {
+    fontSize: 14,
+    fontWeight: "700",
+    marginBottom: 3,
+  },
+  siteMeta: {
+    fontSize: 12,
+  },
+  followBtn: {
+    paddingHorizontal: 16,
+    paddingVertical: 7,
+    borderRadius: 20,
+    marginLeft: 10,
+  },
+  followBtnText: {
+    fontSize: 13,
+    fontWeight: "600",
+  },
+
+  /* More sites */
+  moreSitesRow: {
+    paddingHorizontal: 20,
+    gap: 12,
+    alignItems: "center",
+  },
+  moreSiteCircle: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    borderWidth: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
+  },
+  moreSiteAvatar: {
+    width: "100%",
+    height: "100%",
+  },
+
+  /* Events */
+  eventCard: {
+    borderRadius: 16,
+    overflow: "hidden",
+    height: 200,
+    marginTop: 4,
+  },
+  eventImage: {
+    width: "100%",
+    height: "100%",
+  },
+  eventOverlay: {
+    ...StyleSheet.absoluteFill,
+  },
+  eventCenterLabel: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  eventCenterText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "700",
+    letterSpacing: 0.3,
+    textShadowColor: "rgba(0,0,0,0.5)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
+  },
+  eventStats: {
+    position: "absolute",
+    bottom: 14,
+    left: 16,
+    right: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 14,
+  },
+  statItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  statRight: {
+    marginLeft: "auto",
+  },
+  statText: {
+    fontSize: 13,
+    fontWeight: "600",
+  },
+});
